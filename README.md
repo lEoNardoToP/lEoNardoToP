@@ -1,50 +1,64 @@
 # Leonardo Rosati
 
-Computer Science student at the University of Bologna, focused on **AI**, **backend development**, and **cybersecurity**.
+Computer Science student at the University of Bologna, focused on **backend development**, **applied AI**, and **cybersecurity**.
 
-I like building practical software: Python tools, FastAPI backends, AI experiments, automation scripts, and security-oriented projects.
-
----
-
-## What I am working on
-
-- **AI and algorithmic systems** — game-playing agents, self-play, search, and learning-based approaches.
-- **Backend development** — REST APIs, authentication, data handling, and production-oriented project structure.
-- **Cybersecurity** — Linux, networking, log analysis, hardening, and security labs.
-- **Automation tools** — Python utilities that solve real problems instead of staying as toy examples.
+I build practical software projects: APIs, automation tools, AI-oriented prototypes, web applications, and security-focused experiments.
 
 ---
 
-## Tech stack
+## What I am aiming for
+
+I am looking for junior roles where I can grow as an **AI-oriented software developer**, especially in teams working on:
+
+- backend systems and APIs
+- applied AI products
+- automation tools
+- cybersecurity and infrastructure
+- developer tooling
+
+---
+
+## Core stack
 
 **Languages:** Python, JavaScript, C, C++, Java  
-**Backend:** FastAPI, REST APIs, JWT authentication  
-**AI / Data:** PyTorch, NumPy, search algorithms, self-play experiments  
-**Frontend / Mobile:** React, React Native, basic UI prototyping  
+**Backend:** FastAPI, Django, REST APIs, JWT authentication  
+**AI / Algorithms:** PyTorch, NumPy, search algorithms, self-play experiments  
+**Frontend / Mobile:** React, React Native, HTML/CSS/JavaScript  
 **Security / Systems:** Linux, networking, Docker, Suricata, shell scripting  
 **Tools:** Git, GitHub, Docker, FFmpeg, yt-dlp
 
 ---
 
-## Projects I am polishing for this profile
+## Portfolio focus
 
-### AI / Game Theory
-Research-style AI experiments involving simplified poker, self-play, and Counterfactual Regret Minimization concepts.
+### 1. Backend + AI
+Projects that combine API design, authentication, data handling, and AI-assisted workflows.
 
-### FastAPI Backend
-Backend API projects with authentication, JWT-based login, protected routes, and clean API structure.
+### 2. Cybersecurity tooling
+Experiments around logs, networking, Linux hardening, detection rules, and security analysis.
 
-### Python Desktop Tools
-Python applications with graphical interfaces and real-world integrations such as FFmpeg and yt-dlp.
+### 3. Algorithms and game AI
+Algorithmic projects involving search, self-play, and decision-making systems.
 
-### Cybersecurity Labs
-Writeups and small tools around networking, Linux hardening, IDS/log analysis, and security fundamentals.
+### 4. Practical software tools
+Python utilities and web applications built to solve concrete problems rather than stay as toy examples.
 
 ---
 
-## Current goal
+## Featured projects to review
 
-I am looking for junior opportunities where I can grow as an **AI-oriented software developer**, especially in teams working on backend systems, automation, security, or applied AI products.
+- **Lernify_WEBAPP** — learning-oriented web application, currently being polished as a portfolio project.
+- **AVIATIONTEST** — Django prototype for aviation exam information and request handling.
+- **Logics** — educational web platform prototype covering programming, cybersecurity, AI, databases, and related topics.
+- **Algorithms / Game AI projects** — algorithmic experiments and coursework-style implementations to be cleaned and documented.
+
+---
+
+## Next flagship project
+
+I am planning a stronger portfolio project around **AI + backend + cybersecurity**: an incident/log analysis assistant that parses logs, detects suspicious patterns, and generates remediation reports.
+
+This direction matches the kind of software I want to build professionally: useful, technical, and close to real business/security problems.
 
 ---
 
