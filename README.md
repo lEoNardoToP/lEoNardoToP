@@ -1,68 +1,89 @@
-# Leonardo Rosati
+# Hi, I'm Leonardo Rosati
 
-Computer Science student at the University of Bologna, focused on **backend development**, **applied AI**, and **cybersecurity**.
+Computer Science student at the University of Bologna, focused on **backend development**, **automation**, **applied AI**, and **data-driven software systems**.
 
-I build practical software projects: APIs, automation tools, AI-oriented prototypes, web applications, and security-focused experiments.
+I like building practical projects that connect software engineering with real-world domains such as trading/risk, cybersecurity, education, health data, materials science, and robotics.
 
----
+## What I am working toward
 
-## What I am aiming for
+I am looking for junior, internship, freelance, or remote-friendly opportunities where I can grow as an **AI-oriented software developer**.
 
-I am looking for junior roles where I can grow as an **AI-oriented software developer**, especially in teams working on:
+The areas that interest me most are:
 
 - backend systems and APIs
-- applied AI products
-- automation tools
-- cybersecurity and infrastructure
-- developer tooling
-
----
+- AI-assisted products and automation
+- fintech, trading tools, and risk dashboards
+- cybersecurity tooling and log analysis
+- scientific and interdisciplinary software
+- robotics, simulation, and decision-making systems
 
 ## Core stack
 
-**Languages:** Python, JavaScript, C, C++, Java  
-**Backend:** FastAPI, Django, REST APIs, JWT authentication  
-**AI / Algorithms:** PyTorch, NumPy, search algorithms, self-play experiments  
-**Frontend / Mobile:** React, React Native, HTML/CSS/JavaScript  
-**Security / Systems:** Linux, networking, Docker, Suricata, shell scripting  
-**Tools:** Git, GitHub, Docker, FFmpeg, yt-dlp
+**Languages:** Python, JavaScript, Java, C, C++, PHP, SQL  
+**Backend:** Django, FastAPI, REST APIs, authentication, automation scripts  
+**Frontend:** HTML, CSS, JavaScript, React/Vue basics  
+**Data / AI:** NumPy, Pandas, Matplotlib, scikit-learn basics, reinforcement learning experiments  
+**Tools:** Git, GitHub, Docker, Linux, Selenium, Streamlit, MySQL  
 
----
+## Featured projects
 
-## Portfolio focus
+### Lernify_WEBAPP
 
-### 1. Backend + AI
-Projects that combine API design, authentication, data handling, and AI-assisted workflows.
+Learning-oriented web application prototype.
 
-### 2. Cybersecurity tooling
-Experiments around logs, networking, Linux hardening, detection rules, and security analysis.
+This project is being polished into a portfolio-ready web app showing:
 
-### 3. Algorithms and game AI
-Algorithmic projects involving search, self-play, and decision-making systems.
+- web application structure
+- frontend/backend integration
+- learning-platform product thinking
+- setup and documentation improvements
 
-### 4. Practical software tools
-Python utilities and web applications built to solve concrete problems rather than stay as toy examples.
+Repository: [Lernify_WEBAPP](https://github.com/lEoNardoToP/Lernify_WEBAPP)
 
----
+### Trading and risk dashboard
 
-## Featured projects to review
+Python project direction focused on trading automation, market data, indicators, and risk metrics.
 
-- **Lernify_WEBAPP** — learning-oriented web application, currently being polished as a portfolio project.
-- **AVIATIONTEST** — Django prototype for aviation exam information and request handling.
-- **Logics** — educational web platform prototype covering programming, cybersecurity, AI, databases, and related topics.
-- **Algorithms / Game AI projects** — algorithmic experiments and coursework-style implementations to be cleaned and documented.
+The goal is to turn it into a stronger portfolio project for fintech and trading API roles, with:
 
----
+- paper trading workflow
+- dashboard and alerts
+- Sharpe ratio, drawdown, win rate, exposure, and P/L metrics
+- clean setup instructions and environment handling
 
-## Next flagship project
+Status: being prepared for portfolio release.
 
-I am planning a stronger portfolio project around **AI + backend + cybersecurity**: an incident/log analysis assistant that parses logs, detects suspicious patterns, and generates remediation reports.
+### Logics
 
-This direction matches the kind of software I want to build professionally: useful, technical, and close to real business/security problems.
+Educational web platform prototype covering programming, cybersecurity, AI, databases, cryptography, and web development.
 
----
+This is an older broad-scope project that I am progressively cleaning and documenting to show learning history, initiative, and product exploration.
+
+Repository: [Logics](https://github.com/lEoNardoToP/Logics)
+
+### AVIATIONTEST
+
+Django web application prototype related to aviation exam information and request handling.
+
+It demonstrates:
+
+- Django project structure
+- models and migrations
+- forms and user-submitted data
+- HTML/CSS frontend work
+
+Repository: [AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST)
+
+## Portfolio roadmap
+
+I am currently improving my GitHub profile around three stronger portfolio tracks:
+
+1. **Fintech / trading systems** - trading bot, risk metrics, dashboards, market data.
+2. **AI + cybersecurity** - log analysis, anomaly detection, incident report automation.
+3. **Scientific AI** - small experiments around health data, bio/medical data, materials, and simulation.
 
 ## Contact
 
 - GitHub: [@lEoNardoToP](https://github.com/lEoNardoToP)
 - LinkedIn: [Leonardo Rosati](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+- Email: leonardo.rosati@icloud.com
