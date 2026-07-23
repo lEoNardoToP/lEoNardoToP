@@ -1,75 +1,70 @@
-# Hi, I'm Leonardo Rosati
+# Leonardo Rosati
 
-Computer Science student at the University of Bologna, focused on **backend development**, **automation**, **applied AI**, and **data-driven software systems**.
+Computer Science student at the University of Bologna, focused on **AI-oriented software development**, **backend systems**, and **security tooling**.
 
-I like building practical projects that connect software engineering with real-world domains such as cybersecurity, education, health data, materials science, and robotics.
+I build small but inspectable technical projects where the mechanics are visible: algorithms, neural-network components, reinforcement-learning loops, CI, and clean developer-facing documentation.
 
-## What I am working toward
+## Best project to review first
 
-I am looking for junior, internship, freelance, or remote-friendly opportunities where I can grow as an **AI-oriented software developer**.
+### [polyglot-alpha-beta-arena](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena)
 
-The areas that interest me most are:
+An AI/algorithmic portfolio repository containing three compact systems:
 
-- backend systems and APIs
-- AI-assisted products and automation
-- cybersecurity tooling and log analysis
-- scientific and interdisciplinary software
-- robotics, simulation, and decision-making systems
+- **NeuroForge C++** — reverse-mode autodiff, computation graphs, MLP training, binary cross-entropy, Adam optimizer, and gradient checking implemented from scratch.
+- **DeepGrid Java** — small Deep Q-Network with manual backpropagation, Bellman targets, replay buffer, target network, and epsilon-greedy policy.
+- **Polyglot Alpha-Beta Arena** — minimax with alpha-beta pruning implemented consistently in Python, JavaScript, C, C++, Java, PHP, C#, and Swift with one shared JSON protocol.
+
+Why it matters:
+
+- it is not an API wrapper;
+- it exposes the mechanics behind ML/RL/search;
+- it compiles and runs through GitHub Actions;
+- it is narrow enough to review in an interview;
+- it shows that I can keep one technical contract consistent across different languages.
+
+```bash
+./run_ai_mechanics.sh
+```
+
+## Current direction
+
+I am building toward roles around:
+
+- backend systems and APIs;
+- applied AI and automation;
+- cybersecurity tooling and log analysis;
+- developer tools;
+- algorithmic and decision-making systems.
 
 ## Core stack
 
-**Languages:** Python, JavaScript, Java, C, C++, PHP, SQL  
-**Backend:** Django, FastAPI, REST APIs, authentication, automation scripts  
+**Languages:** Python, C++, Java, JavaScript, C, PHP, SQL  
+**AI / Data:** NumPy, Pandas, scikit-learn basics, from-scratch ML/RL experiments  
+**Backend:** FastAPI, Django, REST APIs, authentication, automation scripts  
 **Frontend:** HTML, CSS, JavaScript, React/Vue basics  
-**Data / AI:** NumPy, Pandas, Matplotlib, scikit-learn basics, reinforcement learning experiments  
-**Tools:** Git, GitHub, Docker, Linux, Selenium, Streamlit, MySQL  
+**Systems / Tools:** Git, GitHub Actions, Docker, Linux, CMake, shell scripting
 
-## Featured projects
+## Other public projects
 
-### Lernify_WEBAPP
+### [Lernify_WEBAPP](https://github.com/lEoNardoToP/Lernify_WEBAPP)
 
-Learning-oriented web application prototype.
+Learning-oriented web application prototype. Currently being cleaned into a more professional portfolio project around web app structure, frontend/backend integration, and education-product thinking.
 
-This project is being polished into a portfolio-ready web app showing:
+### [Logics](https://github.com/lEoNardoToP/Logics)
 
-- web application structure
-- frontend/backend integration
-- learning-platform product thinking
-- setup and documentation improvements
+Older educational web platform prototype covering programming, cybersecurity, AI, databases, cryptography, and web development. Useful as learning history, but not my strongest current project.
 
-Repository: [Lernify_WEBAPP](https://github.com/lEoNardoToP/Lernify_WEBAPP)
+### [AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST)
 
-### Logics
-
-Educational web platform prototype covering programming, cybersecurity, AI, databases, cryptography, and web development.
-
-This is an older broad-scope project that I am progressively cleaning and documenting to show learning history, initiative, and product exploration.
-
-Repository: [Logics](https://github.com/lEoNardoToP/Logics)
-
-### AVIATIONTEST
-
-Django web application prototype related to aviation exam information and request handling.
-
-It demonstrates:
-
-- Django project structure
-- models and migrations
-- forms and user-submitted data
-- HTML/CSS frontend work
-
-Repository: [AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST)
+Django web application prototype related to aviation exam information and request handling. Shows early Django structure, models, forms, and HTML/CSS frontend work.
 
 ## Portfolio roadmap
 
-I am currently improving my GitHub profile around three stronger portfolio tracks:
+Next serious project: **IncidentLens** — an AI-assisted log and incident-analysis tool using FastAPI, PostgreSQL, React, Docker, detection rules, and LLM-generated remediation reports.
 
-1. **Web applications and backend systems** - learning platforms, APIs, authentication, database-backed apps.
-2. **AI + cybersecurity** - log analysis, anomaly detection, incident report automation.
-3. **Scientific AI** - small experiments around health data, bio/medical data, materials, and simulation.
+The goal is to connect AI/backend work with a real business/security problem rather than build another generic chatbot.
 
 ## Contact
 
 - GitHub: [@lEoNardoToP](https://github.com/lEoNardoToP)
 - LinkedIn: [Leonardo Rosati](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
-- Email: leonardo.rosati@icloud.com
