@@ -1,68 +1,69 @@
 # Leonardo Rosati
 
-Computer Science student at the University of Bologna, focused on **AI-oriented software development**, **backend systems**, and **security tooling**.
+**Applied AI / Software Engineer** building inspectable systems across AI, algorithms, backend engineering, and security tooling.
 
-I build small but inspectable technical projects where the mechanics are visible: algorithms, neural-network components, reinforcement-learning loops, CI, and clean developer-facing documentation.
+BSc Computer Science at the **University of Bologna — in progress**.
 
-## Best project to review first
+I focus on systems where the engineering can be inspected: orchestration, evaluation, failure handling, reproducible tests, algorithms, ML/RL mechanics, security analysis, and developer-facing tooling.
 
-### [polyglot-alpha-beta-arena](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena)
+## Flagship work
 
-An AI/algorithmic portfolio repository containing three compact systems:
+### HypoWeb — private R&D
 
-- **NeuroForge C++** — reverse-mode autodiff, computation graphs, MLP training, binary cross-entropy, Adam optimizer, and gradient checking implemented from scratch.
-- **DeepGrid Java** — small Deep Q-Network with manual backpropagation, Bellman targets, replay buffer, target network, and epsilon-greedy policy.
-- **Polyglot Alpha-Beta Arena** — minimax with alpha-beta pruning implemented consistently in Python, JavaScript, C, C++, Java, PHP, C#, and Swift with one shared JSON protocol.
+Scientific-reasoning and evidence-orchestration system for retrieving sources, extracting claims, linking evidence, generating and challenging hypotheses, ranking candidates, and tracking provenance across research runs.
 
-Why it matters:
+**Focus:** Python · scientific AI · evidence retrieval · evaluation · provenance · autonomous workflows
 
-- it is not an API wrapper;
-- it exposes the mechanics behind ML/RL/search;
-- it compiles and runs through GitHub Actions;
-- it is narrow enough to review in an interview;
-- it shows that I can keep one technical contract consistent across different languages.
+What I own: system architecture, research orchestration, evaluation logic, failure handling, iterative experimentation, and release hardening.
+
+### IncidentLens — private R&D
+
+Security-analysis system built around controlled vulnerability discovery and validation in sandboxed/lab environments, with structured findings, repeatable evaluation, and defensive reporting workflows.
+
+**Focus:** C++ · Python · security tooling · CodeQL · Docker · evaluation · automation
+
+What I own: architecture, discovery/validation workflow, benchmark design, safety boundaries, testing, and release iteration.
+
+### [polyglot-alpha-beta-arena](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) — public
+
+A compact, inspectable AI/algorithms portfolio containing:
+
+- **NeuroForge C++** — reverse-mode autodiff, MLP training, binary cross-entropy, Adam, and gradient checking implemented from scratch;
+- **DeepGrid Java** — a Deep Q-Network with manual backpropagation, replay buffer, Bellman targets, target network, and epsilon-greedy exploration;
+- **Polyglot Alpha-Beta Arena** — minimax with alpha-beta pruning implemented consistently across Python, JavaScript, C, C++, Java, PHP, C#, and Swift through a shared JSON contract.
 
 ```bash
 ./run_ai_mechanics.sh
 ```
 
-## Current direction
+The repository is intentionally small enough to review during a technical interview and uses automated build/test checks to keep the implementations consistent.
 
-I am building toward roles around:
+## What I want to work on
 
-- backend systems and APIs;
-- applied AI and automation;
-- cybersecurity tooling and log analysis;
-- developer tools;
-- algorithmic and decision-making systems.
+- applied AI systems and automation;
+- backend / platform engineering;
+- AI evaluation and agentic workflows;
+- security engineering and defensive tooling;
+- algorithmic and decision-making systems;
+- developer tools.
 
 ## Core stack
 
-**Languages:** Python, C++, Java, JavaScript, C, PHP, SQL  
-**AI / Data:** NumPy, Pandas, scikit-learn basics, from-scratch ML/RL experiments  
-**Backend:** FastAPI, Django, REST APIs, authentication, automation scripts  
-**Frontend:** HTML, CSS, JavaScript, React/Vue basics  
-**Systems / Tools:** Git, GitHub Actions, Docker, Linux, CMake, shell scripting
+**Languages:** Python, C++, Java, JavaScript/TypeScript, C, PHP, C#, Swift, SQL  
+**AI / Data:** NumPy, Pandas, scikit-learn, from-scratch ML/RL, LLM-based systems, evaluation pipelines  
+**Backend:** FastAPI, Django, REST APIs, automation scripts  
+**Systems / Security:** Git, GitHub Actions, Docker, Linux/macOS, CMake, shell scripting, CodeQL
 
-## Other public projects
+## Additional public work
 
 ### [Lernify_WEBAPP](https://github.com/lEoNardoToP/Lernify_WEBAPP)
-
-Learning-oriented web application prototype. Currently being cleaned into a more professional portfolio project around web app structure, frontend/backend integration, and education-product thinking.
+Web application prototype covering frontend/backend integration and product-oriented development.
 
 ### [Logics](https://github.com/lEoNardoToP/Logics)
-
-Older educational web platform prototype covering programming, cybersecurity, AI, databases, cryptography, and web development. Useful as learning history, but not my strongest current project.
+Earlier educational platform project. Kept as development history rather than presented as flagship work.
 
 ### [AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST)
-
-Django web application prototype related to aviation exam information and request handling. Shows early Django structure, models, forms, and HTML/CSS frontend work.
-
-## Portfolio roadmap
-
-Next serious project: **IncidentLens** — an AI-assisted log and incident-analysis tool using FastAPI, PostgreSQL, React, Docker, detection rules, and LLM-generated remediation reports.
-
-The goal is to connect AI/backend work with a real business/security problem rather than build another generic chatbot.
+Earlier Django application showing models, forms, request handling, and frontend integration.
 
 ## Contact
 
