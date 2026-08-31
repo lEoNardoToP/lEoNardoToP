@@ -1,99 +1,16 @@
-name: IncidentLens Zero-Cost DEV
+name: IncidentLens Zero-Cost DEV v1 (consumed)
 
 on:
-  push:
-    branches: [incidentlens-zero-cost-bench]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  command-grounding-dev:
+  consumed-dev-v1:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Verify Docker and runner
-        run: |
-          set -euxo pipefail
-          docker --version
-          docker info --format '{{json .ServerVersion}}'
-
-      - name: Fetch pinned task and consumed-human ID files
-        run: |
-          set -euxo pipefail
-          ROOT=/tmp/cyber-task-horizons-data
-          mkdir -p "$ROOT/data/human" "$ROOT/data/tasks/nl2bash" "$ROOT/data/tasks/cybashbench"
-          BASE=https://raw.githubusercontent.com/lyptus-research/cyber-task-horizons-data/178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
-          curl --fail --location --retry 3 "$BASE/data/human/completions.csv" -o "$ROOT/data/human/completions.csv"
-          curl --fail --location --retry 3 "$BASE/data/tasks/nl2bash/nl2bash_tasks.jsonl" -o "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
-          curl --fail --location --retry 3 "$BASE/data/tasks/cybashbench/cybashbench_tasks.jsonl" -o "$ROOT/data/tasks/cybashbench/cybashbench_tasks.jsonl"
-          sha256sum "$ROOT/data/human/completions.csv" "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl" "$ROOT/data/tasks/cybashbench/cybashbench_tasks.jsonl"
-
-      - name: Install local llama.cpp runtime
-        run: |
-          set -euxo pipefail
-          curl -LsSf https://llama.app/install.sh | sh
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          "$HOME/.local/bin/llama" --version
-
-      - name: Start frozen local model
-        run: |
-          set -euxo pipefail
-          export PATH="$HOME/.local/bin:$PATH"
-          nohup llama serve \
-            -hf Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF:Q4_K_M \
-            --host 127.0.0.1 --port 8080 -c 2048 -np 1 \
-            > /tmp/llama-dev.log 2>&1 &
-          PID=$!
-          for i in $(seq 1 120); do
-            if curl -fsS http://127.0.0.1:8080/health >/dev/null 2>&1; then exit 0; fi
-            if ! kill -0 "$PID" 2>/dev/null; then tail -200 /tmp/llama-dev.log; exit 1; fi
-            sleep 2
-          done
-          tail -200 /tmp/llama-dev.log
-          exit 1
-
-      - name: Run DEV plus untouched internal holdout
-        run: |
-          set -euxo pipefail
-          mkdir -p dev_out
-          python3 incidentlens_bench/zero_cost_command_dev.py \
-            --data-root /tmp/cyber-task-horizons-data \
-            --out-dir dev_out \
-            --base-url http://127.0.0.1:8080 \
-            --limit 60
-          cat dev_out/dev_summary.json
-
-      - name: Record freeze metadata
-        if: always()
-        run: |
-          set +e
-          mkdir -p dev_out
-          {
-            echo "workflow_commit=${GITHUB_SHA}"
-            echo "data_commit=178c0da1800f9c07311e1b8d6c61dd8104e7b4ae"
-            echo "model_repo=Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF"
-            echo "model_quant=Q4_K_M"
-            echo "adapter=incidentlens_bench/zero_cost_command_dev.py"
-            sha256sum incidentlens_bench/zero_cost_command_dev.py
-            echo "consumed_human_run=33389075503"
-          } > dev_out/freeze_metadata.txt
-          tail -100 /tmp/llama-dev.log > dev_out/llama-tail.log 2>/dev/null || true
-
-      - name: Upload DEV evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: incidentlens-zero-cost-grounding-dev
-          path: dev_out/
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Scope declaration
-        if: always()
-        run: |
-          echo 'No human-overlap task is eligible for DEV selection.'
-          echo 'No generated command is executed. No paid API. No arbitrary target.'
+      - run: |
+          echo 'DEV v1 task split is consumed for tuning.'
+          echo 'Canonical run: 33396064815.'
+          echo 'The original scorer had an MCQ reference bug; use scoring-corrected v1.1 for the same frozen adapter.'
