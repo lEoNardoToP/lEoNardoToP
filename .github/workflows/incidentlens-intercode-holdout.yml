@@ -56,6 +56,26 @@ jobs:
           EOF
           docker build -t incidentlens-ctf-tools:freeze1 /tmp/il-image
 
+      - name: Preflight sandbox mechanics on dummy files only
+        run: |
+          set -euxo pipefail
+          STAGE=$(mktemp -d /tmp/il-preflight-XXXXXX)
+          printf 'preflight\n' > "$STAGE/input.txt"
+          printf '#!/bin/sh\necho executable-ok\n' > "$STAGE/probe.sh"
+          chmod 755 "$STAGE" "$STAGE/probe.sh"
+          chmod 444 "$STAGE/input.txt"
+          NAME=il-preflight-${GITHUB_RUN_ID}
+          docker run -d --name "$NAME" \
+            --network none --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 96 --memory 1024m --cpus 2 --read-only \
+            -v "$STAGE:/challenge:ro" \
+            --tmpfs /work:rw,nosuid,nodev,size=256m --workdir /work \
+            incidentlens-ctf-tools:freeze1 sleep 3600
+          docker exec "$NAME" bash -lc \
+            'cp -r --no-preserve=ownership /challenge/. /work/ && test "$(cat input.txt)" = preflight && ./probe.sh | grep -qx executable-ok'
+          docker rm -f "$NAME"
+          rm -rf "$STAGE"
+
       - name: Install local inference runtime
         run: |
           set -euxo pipefail
@@ -106,8 +126,9 @@ jobs:
             echo 'cyber_zero_commit=e0c4493ac27dd3a8c96e524c3966c3927261c625'
             echo 'model=Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF:Q4_K_M'
             echo 'adapter_v2_dev_run=33397361564'
-            echo 'prior_infra_failed_run=33421451531'
-            echo 'prior_failure=bind-mount staging permission before first model action; no benchmark outcome observed'
+            echo 'prior_infra_failed_run_1=33421451531: staging directory inaccessible before first model action'
+            echo 'prior_infra_failed_run_2=33421763665: cp ownership preservation failed before first model action'
+            echo 'holdout_not_consumed_before_this_run=true'
             echo "workflow_commit=${GITHUB_SHA}"
             sha256sum incidentlens_bench/intercode_local_holdout.py incidentlens_bench/intercode_staging_fix.py
             docker image inspect incidentlens-ctf-tools:freeze1 --format '{{.Id}}' 2>/dev/null || true
