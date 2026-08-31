@@ -84,7 +84,7 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p intercode_out
-          python3 incidentlens_bench/intercode_local_holdout.py \
+          PYTHONPATH=incidentlens_bench python3 incidentlens_bench/intercode_staging_fix.py \
             --bench-root /tmp/Cyber-Zero/benchmarks/intercode_ctf/rev \
             --human-csv /tmp/human/completions.csv \
             --out-dir intercode_out \
@@ -106,8 +106,10 @@ jobs:
             echo 'cyber_zero_commit=e0c4493ac27dd3a8c96e524c3966c3927261c625'
             echo 'model=Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF:Q4_K_M'
             echo 'adapter_v2_dev_run=33397361564'
+            echo 'prior_infra_failed_run=33421451531'
+            echo 'prior_failure=bind-mount staging permission before first model action; no benchmark outcome observed'
             echo "workflow_commit=${GITHUB_SHA}"
-            sha256sum incidentlens_bench/intercode_local_holdout.py
+            sha256sum incidentlens_bench/intercode_local_holdout.py incidentlens_bench/intercode_staging_fix.py
             docker image inspect incidentlens-ctf-tools:freeze1 --format '{{.Id}}' 2>/dev/null || true
           } > intercode_out/provenance.txt
           tail -150 /tmp/intercode-model.log > intercode_out/model-tail.log 2>/dev/null || true
