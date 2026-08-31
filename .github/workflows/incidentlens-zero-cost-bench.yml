@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  nl2bash-human-overlap:
+  command-human-overlap:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -25,32 +25,39 @@ jobs:
         run: |
           set -euxo pipefail
           ROOT=/tmp/cyber-task-horizons-data
-          mkdir -p "$ROOT/data/human" "$ROOT/data/tasks/nl2bash"
+          mkdir -p "$ROOT/data/human" "$ROOT/data/tasks/nl2bash" "$ROOT/data/tasks/cybashbench"
           BASE=https://raw.githubusercontent.com/lyptus-research/cyber-task-horizons-data/178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
           curl --fail --location --retry 3 "$BASE/data/human/completions.csv" -o "$ROOT/data/human/completions.csv"
           curl --fail --location --retry 3 "$BASE/data/tasks/nl2bash/nl2bash_tasks.jsonl" -o "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
-          sha256sum "$ROOT/data/human/completions.csv" "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
+          curl --fail --location --retry 3 "$BASE/data/tasks/cybashbench/cybashbench_tasks.jsonl" -o "$ROOT/data/tasks/cybashbench/cybashbench_tasks.jsonl"
+          sha256sum "$ROOT/data/human/completions.csv" "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl" "$ROOT/data/tasks/cybashbench/cybashbench_tasks.jsonl"
 
       - name: Install local llama.cpp runtime
         run: |
           set -euxo pipefail
           curl -LsSf https://llama.app/install.sh | sh
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          "$HOME/.local/bin/llama-server" --version || true
+          "$HOME/.local/bin/llama" --version
 
       - name: Start local Qwen coder model
         run: |
           set -euxo pipefail
           export PATH="$HOME/.local/bin:$PATH"
-          nohup llama-server \
+          nohup llama serve \
             -hf Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF:Q4_K_M \
             --host 127.0.0.1 --port 8080 -c 2048 -np 1 \
             > /tmp/llama-server.log 2>&1 &
-          echo $! > /tmp/llama-server.pid
+          PID=$!
+          echo "$PID" > /tmp/llama-server.pid
           for i in $(seq 1 120); do
             if curl -fsS http://127.0.0.1:8080/health >/dev/null 2>&1; then
               echo 'llama server ready'
               exit 0
+            fi
+            if ! kill -0 "$PID" 2>/dev/null; then
+              echo 'llama server exited early'
+              tail -200 /tmp/llama-server.log
+              exit 1
             fi
             sleep 2
           done
@@ -61,7 +68,7 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p bench_out
-          python3 incidentlens_bench/zero_cost_nl2bash.py \
+          python3 incidentlens_bench/zero_cost_command_human.py \
             --data-root /tmp/cyber-task-horizons-data \
             --out-dir bench_out \
             --base-url http://127.0.0.1:8080
@@ -78,7 +85,7 @@ jobs:
             echo "model_repo=Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF"
             echo "model_quant=Q4_K_M"
             echo "runner=${RUNNER_OS}/${RUNNER_ARCH}"
-            "$HOME/.local/bin/llama-server" --version 2>/dev/null | head -1
+            "$HOME/.local/bin/llama" --version 2>/dev/null | head -2
           } > bench_out/reproducibility.txt
           tail -200 /tmp/llama-server.log > bench_out/llama-server-tail.log 2>/dev/null || true
 
@@ -86,7 +93,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: incidentlens-zero-cost-nl2bash
+          name: incidentlens-zero-cost-command-human
           path: bench_out/
           if-no-files-found: error
           retention-days: 7
