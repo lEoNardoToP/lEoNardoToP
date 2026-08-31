@@ -11,7 +11,7 @@ permissions:
 jobs:
   nl2bash-human-overlap:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
 
@@ -21,13 +21,15 @@ jobs:
           docker --version
           docker info --format '{{json .ServerVersion}}'
 
-      - name: Fetch pinned human baseline
+      - name: Fetch only pinned human/task files
         run: |
           set -euxo pipefail
-          git clone https://github.com/lyptus-research/cyber-task-horizons-data.git /tmp/cyber-task-horizons-data
-          cd /tmp/cyber-task-horizons-data
-          git checkout 178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
-          git rev-parse HEAD
+          ROOT=/tmp/cyber-task-horizons-data
+          mkdir -p "$ROOT/data/human" "$ROOT/data/tasks/nl2bash"
+          BASE=https://raw.githubusercontent.com/lyptus-research/cyber-task-horizons-data/178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
+          curl --fail --location --retry 3 "$BASE/data/human/completions.csv" -o "$ROOT/data/human/completions.csv"
+          curl --fail --location --retry 3 "$BASE/data/tasks/nl2bash/nl2bash_tasks.jsonl" -o "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
+          sha256sum "$ROOT/data/human/completions.csv" "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
 
       - name: Install local llama.cpp runtime
         run: |
