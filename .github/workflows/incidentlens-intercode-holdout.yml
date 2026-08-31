@@ -61,7 +61,7 @@ jobs:
           set -euxo pipefail
           STAGE=$(mktemp -d /tmp/il-preflight-XXXXXX)
           printf 'preflight\n' > "$STAGE/input.txt"
-          printf '#!/bin/sh\necho executable-ok\n' > "$STAGE/probe.sh"
+          printf '#!/bin/sh\necho interpreter-ok\n' > "$STAGE/probe.sh"
           chmod 755 "$STAGE" "$STAGE/probe.sh"
           chmod 444 "$STAGE/input.txt"
           NAME=il-preflight-${GITHUB_RUN_ID}
@@ -72,7 +72,7 @@ jobs:
             --tmpfs /work:rw,nosuid,nodev,size=256m --workdir /work \
             incidentlens-ctf-tools:freeze1 sleep 3600
           docker exec "$NAME" bash -lc \
-            'cp -r --no-preserve=ownership /challenge/. /work/ && test "$(cat input.txt)" = preflight && ./probe.sh | grep -qx executable-ok'
+            'cp -r --no-preserve=ownership /challenge/. /work/ && test "$(cat input.txt)" = preflight && sh probe.sh | grep -qx interpreter-ok && file probe.sh >/dev/null && sha256sum input.txt >/dev/null'
           docker rm -f "$NAME"
           rm -rf "$STAGE"
 
@@ -128,6 +128,7 @@ jobs:
             echo 'adapter_v2_dev_run=33397361564'
             echo 'prior_infra_failed_run_1=33421451531: staging directory inaccessible before first model action'
             echo 'prior_infra_failed_run_2=33421763665: cp ownership preservation failed before first model action'
+            echo 'prior_infra_failed_run_3=33422275816: dummy preflight incorrectly attempted direct exec on noexec work tmpfs; model/task steps skipped'
             echo 'holdout_not_consumed_before_this_run=true'
             echo "workflow_commit=${GITHUB_SHA}"
             sha256sum incidentlens_bench/intercode_local_holdout.py incidentlens_bench/intercode_staging_fix.py
