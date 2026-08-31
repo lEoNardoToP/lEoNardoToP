@@ -9,22 +9,88 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  nl2bash-human-overlap:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Docker
+
+      - name: Verify zero-cost runner and Docker
         run: |
           set -euxo pipefail
           docker --version
           docker info --format '{{json .ServerVersion}}'
-      - name: Clone free benchmark sources
+
+      - name: Fetch pinned human baseline
         run: |
           set -euxo pipefail
-          git clone --depth 1 https://github.com/nyu-llm-ctf/nyu_ctf_bench.git /tmp/nyu_ctf_bench
-          git clone --depth 1 https://github.com/NYU-LLM-CTF/CTFTiny.git /tmp/ctftiny
-          echo "NYU files $(find /tmp/nyu_ctf_bench -type f | wc -l)"
-          echo "CTFTiny files $(find /tmp/ctftiny -type f | wc -l)"
+          git clone https://github.com/lyptus-research/cyber-task-horizons-data.git /tmp/cyber-task-horizons-data
+          cd /tmp/cyber-task-horizons-data
+          git checkout 178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
+          git rev-parse HEAD
+
+      - name: Install local llama.cpp runtime
+        run: |
+          set -euxo pipefail
+          curl -LsSf https://llama.app/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/llama-server" --version || true
+
+      - name: Start local Qwen coder model
+        run: |
+          set -euxo pipefail
+          export PATH="$HOME/.local/bin:$PATH"
+          nohup llama-server \
+            -hf Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF:Q4_K_M \
+            --host 127.0.0.1 --port 8080 -c 2048 -np 1 \
+            > /tmp/llama-server.log 2>&1 &
+          echo $! > /tmp/llama-server.pid
+          for i in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:8080/health >/dev/null 2>&1; then
+              echo 'llama server ready'
+              exit 0
+            fi
+            sleep 2
+          done
+          tail -200 /tmp/llama-server.log
+          exit 1
+
+      - name: Run same-task human comparison
+        run: |
+          set -euxo pipefail
+          mkdir -p bench_out
+          python3 incidentlens_bench/zero_cost_nl2bash.py \
+            --data-root /tmp/cyber-task-horizons-data \
+            --out-dir bench_out \
+            --base-url http://127.0.0.1:8080
+          cat bench_out/summary.json
+
+      - name: Record reproducibility metadata
+        if: always()
+        run: |
+          set +e
+          mkdir -p bench_out
+          {
+            echo "workflow_commit=${GITHUB_SHA}"
+            echo "human_data_commit=178c0da1800f9c07311e1b8d6c61dd8104e7b4ae"
+            echo "model_repo=Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF"
+            echo "model_quant=Q4_K_M"
+            echo "runner=${RUNNER_OS}/${RUNNER_ARCH}"
+            "$HOME/.local/bin/llama-server" --version 2>/dev/null | head -1
+          } > bench_out/reproducibility.txt
+          tail -200 /tmp/llama-server.log > bench_out/llama-server-tail.log 2>/dev/null || true
+
+      - name: Upload benchmark evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: incidentlens-zero-cost-nl2bash
+          path: bench_out/
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Scope declaration
-        run: echo 'Local public CTF benchmark containers only; no arbitrary targets.'
+        if: always()
+        run: |
+          echo 'No paid API. No arbitrary target. No generated command execution.'
+          echo 'Only pinned public benchmark data and local CPU inference are used.'
