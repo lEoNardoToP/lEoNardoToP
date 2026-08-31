@@ -1,0 +1,30 @@
+name: IncidentLens Zero-Cost Bench
+
+on:
+  push:
+    branches: [incidentlens-zero-cost-bench]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Docker
+        run: |
+          set -euxo pipefail
+          docker --version
+          docker info --format '{{json .ServerVersion}}'
+      - name: Clone free benchmark sources
+        run: |
+          set -euxo pipefail
+          git clone --depth 1 https://github.com/nyu-llm-ctf/nyu_ctf_bench.git /tmp/nyu_ctf_bench
+          git clone --depth 1 https://github.com/NYU-LLM-CTF/CTFTiny.git /tmp/ctftiny
+          echo "NYU files $(find /tmp/nyu_ctf_bench -type f | wc -l)"
+          echo "CTFTiny files $(find /tmp/ctftiny -type f | wc -l)"
+      - name: Scope declaration
+        run: echo 'Local public CTF benchmark containers only; no arbitrary targets.'
