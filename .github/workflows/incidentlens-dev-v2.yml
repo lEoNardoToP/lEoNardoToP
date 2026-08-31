@@ -1,0 +1,56 @@
+name: IncidentLens DEV v2
+on:
+  push:
+    branches: [incidentlens-zero-cost-bench]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare pinned data
+        run: |
+          set -euxo pipefail
+          ROOT=/tmp/benchmark-data
+          mkdir -p "$ROOT/data/human" "$ROOT/data/tasks/nl2bash" "$ROOT/data/tasks/cybashbench"
+          BASE=https://raw.githubusercontent.com/lyptus-research/cyber-task-horizons-data/178c0da1800f9c07311e1b8d6c61dd8104e7b4ae
+          curl -fL "$BASE/data/human/completions.csv" -o "$ROOT/data/human/completions.csv"
+          curl -fL "$BASE/data/tasks/nl2bash/nl2bash_tasks.jsonl" -o "$ROOT/data/tasks/nl2bash/nl2bash_tasks.jsonl"
+          curl -fL "$BASE/data/tasks/cybashbench/cybashbench_tasks.jsonl" -o "$ROOT/data/tasks/cybashbench/cybashbench_tasks.jsonl"
+      - name: Prepare local model runtime
+        run: |
+          set -euxo pipefail
+          curl -LsSf https://llama.app/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Start local model
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          nohup llama serve -hf Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF:Q4_K_M --host 127.0.0.1 --port 8080 -c 2048 -np 1 > /tmp/model.log 2>&1 &
+          PID=$!
+          for i in $(seq 1 180); do
+            curl -fsS http://127.0.0.1:8080/health >/dev/null 2>&1 && exit 0
+            kill -0 "$PID" 2>/dev/null || { tail -100 /tmp/model.log; exit 1; }
+            sleep 2
+          done
+          exit 1
+      - name: Evaluate fresh split
+        run: |
+          mkdir -p v2_out
+          python3 incidentlens_bench/zero_cost_command_dev_v2.py --data-root /tmp/benchmark-data --out-dir v2_out --base-url http://127.0.0.1:8080 --limit 50
+          cat v2_out/v2_summary.json
+      - name: Record provenance
+        if: always()
+        run: |
+          mkdir -p v2_out
+          sha256sum incidentlens_bench/zero_cost_command_dev_v2.py > v2_out/script_sha256.txt
+          echo "$GITHUB_SHA" > v2_out/workflow_commit.txt
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: incidentlens-dev-v2
+          path: v2_out/
+          retention-days: 14
