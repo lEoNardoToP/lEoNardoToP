@@ -1,0 +1,52 @@
+name: Build AtlasGuard candidate portfolio
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "projects/atlasguard/portfolio/build_portfolio.py"
+      - ".github/workflows/atlasguard-portfolio-build.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow python-pptx python-docx reportlab
+
+      - name: Generate presentation, PDFs, DOCX and videos
+        run: |
+          cd projects/atlasguard/portfolio
+          python build_portfolio.py
+
+      - name: Commit generated portfolio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects/atlasguard/portfolio/generated
+          if git diff --cached --quiet; then
+            echo "Generated portfolio is already up to date."
+          else
+            git commit -m "atlasguard: publish candidate portfolio [skip portfolio-build]"
+            git push
+          fi
