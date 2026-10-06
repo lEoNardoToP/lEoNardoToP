@@ -43,10 +43,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git rebase origin/main
           git add projects/atlasguard/portfolio/generated
           if git diff --cached --quiet; then
             echo "Generated portfolio is already up to date."
           else
             git commit -m "atlasguard: publish candidate portfolio [skip portfolio-build]"
-            git push
+            git push origin HEAD:main
           fi
