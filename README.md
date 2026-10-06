@@ -1,12 +1,22 @@
 # Leonardo Rosati
 
-**Applied AI / Software Engineer** building inspectable systems across AI, algorithms, backend engineering, and security tooling.
+**Applied AI / Software Engineer** building inspectable systems across AI, algorithms, backend engineering, infrastructure, and security tooling.
 
 BSc Computer Science at the **University of Bologna — in progress**.
 
-I focus on systems where the engineering can be inspected: orchestration, evaluation, failure handling, reproducible tests, algorithms, ML/RL mechanics, security analysis, and developer-facing tooling.
+I focus on systems where the engineering can be inspected: orchestration, evaluation, failure handling, reproducible tests, algorithms, ML/RL mechanics, Linux observability, security analysis, and developer-facing tooling.
 
 ## Flagship work
+
+### [AtlasGuard](https://github.com/lEoNardoToP/lEoNardoToP/tree/main/projects/atlasguard) — public
+
+Linux-native control plane for **ML observability, drift detection and explainable runtime security**.
+
+It combines a lightweight Linux telemetry agent, a FastAPI control plane, Prometheus metrics, Population Stability Index drift monitoring, deterministic runtime-security findings, Docker deployment, systemd integration, a documented threat model, automated tests, and GitHub Actions CI.
+
+**Focus:** Python · Linux · FastAPI · distributed telemetry · ML monitoring · Prometheus · Docker · runtime security
+
+What I own: architecture, telemetry contract, drift implementation, runtime policy engine, agent failure handling, observability, deployment hardening, threat modeling, tests, and CI.
 
 ### HypoWeb — private R&D
 
@@ -40,9 +50,10 @@ The repository is intentionally small enough to review during a technical interv
 
 ## What I want to work on
 
+- ML platform / AI infrastructure;
+- backend and distributed systems;
 - applied AI systems and automation;
-- backend / platform engineering;
-- AI evaluation and agentic workflows;
+- observability and reliability engineering;
 - security engineering and defensive tooling;
 - algorithmic and decision-making systems;
 - developer tools.
@@ -52,7 +63,7 @@ The repository is intentionally small enough to review during a technical interv
 **Languages:** Python, C++, Java, JavaScript/TypeScript, C, PHP, C#, Swift, SQL  
 **AI / Data:** NumPy, Pandas, scikit-learn, from-scratch ML/RL, LLM-based systems, evaluation pipelines  
 **Backend:** FastAPI, Django, REST APIs, automation scripts  
-**Systems / Security:** Git, GitHub Actions, Docker, Linux/macOS, CMake, shell scripting, CodeQL
+**Systems / Security:** Git, GitHub Actions, Docker, Linux/macOS, Prometheus, CMake, shell scripting, CodeQL
 
 ## Additional public work
 
