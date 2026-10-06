@@ -221,6 +221,28 @@ atlasguard/
 └── pyproject.toml
 ```
 
+## Candidate portfolio
+
+A recruiter-ready application package tailored to **Canonical**, **SurveyMonkey**, and **Sysdig** is available under [portfolio/](portfolio/).
+
+It includes:
+
+- a 16-slide PPTX presentation and PDF;
+- three company-specific demo videos;
+- Canonical, SurveyMonkey, and Sysdig technical briefs in DOCX and PDF;
+- a complete ZIP bundle;
+- the reproducible generator and GitHub Actions workflow used to build the binary assets.
+
+Direct links:
+
+- [Portfolio index](portfolio/README.md)
+- [PowerPoint deck](portfolio/generated/AtlasGuard_Candidate_Portfolio_Canonical_SurveyMonkey_Sysdig.pptx)
+- [Presentation PDF](portfolio/generated/AtlasGuard_Candidate_Portfolio_Canonical_SurveyMonkey_Sysdig.pdf)
+- [Complete package ZIP](portfolio/generated/AtlasGuard_Candidate_Portfolio_Package.zip)
+- [Canonical demo](portfolio/generated/videos/AtlasGuard_Canonical_Demo.mp4)
+- [SurveyMonkey demo](portfolio/generated/videos/AtlasGuard_SurveyMonkey_Demo.mp4)
+- [Sysdig demo](portfolio/generated/videos/AtlasGuard_Sysdig_Demo.mp4)
+
 ## Engineering roadmap
 
 The next technically meaningful steps are:
