@@ -3,14 +3,19 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 def utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-class HostSnapshot(BaseModel):
+class TelemetryModel(BaseModel):
+    # Reject before ingest mutates metrics or drift state; JSON cannot encode infinities.
+    model_config = ConfigDict(allow_inf_nan=False)
+
+
+class HostSnapshot(TelemetryModel):
     hostname: str
     cpu_percent: float = Field(ge=0, le=100)
     memory_percent: float = Field(ge=0, le=100)
@@ -19,7 +24,7 @@ class HostSnapshot(BaseModel):
     established_tcp: int = Field(ge=0)
 
 
-class InferenceObservation(BaseModel):
+class InferenceObservation(TelemetryModel):
     service: str
     model: str
     latency_ms: float = Field(ge=0)
@@ -29,7 +34,7 @@ class InferenceObservation(BaseModel):
     input_bytes: int = Field(default=0, ge=0)
 
 
-class RuntimeEvent(BaseModel):
+class RuntimeEvent(TelemetryModel):
     kind: Literal["process", "network", "container"]
     executable: str | None = None
     uid: int | None = None
@@ -38,7 +43,7 @@ class RuntimeEvent(BaseModel):
     image: str | None = None
 
 
-class TelemetryBatch(BaseModel):
+class TelemetryBatch(TelemetryModel):
     agent_id: str
     observed_at: datetime = Field(default_factory=utc_now)
     host: HostSnapshot
@@ -46,13 +51,13 @@ class TelemetryBatch(BaseModel):
     runtime: list[RuntimeEvent] = Field(default_factory=list)
 
 
-class Finding(BaseModel):
+class Finding(TelemetryModel):
     severity: Literal["low", "medium", "high", "critical"]
     rule: str
     message: str
 
 
-class IngestResult(BaseModel):
+class IngestResult(TelemetryModel):
     accepted: bool = True
     findings: list[Finding]
     drift_score: float | None = None

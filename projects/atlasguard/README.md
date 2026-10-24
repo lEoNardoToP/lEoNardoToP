@@ -262,3 +262,10 @@ Those items are intentionally listed as roadmap rather than presented as finishe
 
 **Leonardo Rosati** — Computer Science, University of Bologna  
 [GitHub profile](https://github.com/lEoNardoToP) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+
+## Input and identity regression checks
+
+The HTTP suite exercises health, ingestion, findings, stored state and Prometheus
+output. Invalid nonfinite telemetry is rejected before mutation, and composite
+service/model identifiers cannot share a baseline through delimiter collisions.
+[Contracts, reproduced failure modes and current validation](docs/DRIFT_INPUT_VALIDATION.md).

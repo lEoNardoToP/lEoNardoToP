@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from threading import Lock
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from prometheus_client import Counter, Gauge, Histogram, make_asgi_app
 
 from .drift import DriftDetector
@@ -16,9 +19,21 @@ app = FastAPI(
     description="Linux-native ML observability, drift detection and runtime security.",
 )
 
+
+@app.exception_handler(RequestValidationError)
+async def invalid_request(_request: Request, error: RequestValidationError) -> JSONResponse:
+    # Pydantic errors can contain the rejected NaN/Infinity as input. Echoing
+    # that value makes JSONResponse itself fail, turning admission into HTTP 500.
+    details = [{"loc": item["loc"], "type": item["type"], "msg": item["msg"]}
+               for item in error.errors()]
+    return JSONResponse(status_code=422, content={"detail": details})
+
+
 store = EventStore()
 rules = RuntimeRuleEngine()
-detectors: dict[str, DriftDetector] = defaultdict(DriftDetector)
+# Tuple identity avoids collisions such as ("a:b", "c") and ("a", "b:c").
+detectors: dict[tuple[str, str], DriftDetector] = defaultdict(DriftDetector)
+_detector_lock = Lock()
 
 INGESTED = Counter("atlasguard_batches_total", "Telemetry batches received")
 FINDINGS = Counter(
@@ -72,8 +87,11 @@ def ingest(batch: TelemetryBatch) -> IngestResult:
         if observation.feature_value is None:
             continue
 
-        key = f"{observation.service}:{observation.model}"
-        score, is_drifted = detectors[key].observe(observation.feature_value)
+        key = (observation.service, observation.model)
+        # FastAPI sync endpoints use worker threads. Baseline/window updates
+        # form one state transition and must not interleave for the same key.
+        with _detector_lock:
+            score, is_drifted = detectors[key].observe(observation.feature_value)
         if score is not None:
             DRIFT_SCORE.labels(
                 service=observation.service, model=observation.model
