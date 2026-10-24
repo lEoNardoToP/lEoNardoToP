@@ -1,82 +1,99 @@
 # Leonardo Rosati
 
-**Applied AI / Software Engineer** building inspectable systems across AI, algorithms, backend engineering, infrastructure, and security tooling.
+**Software engineer focused on AI infrastructure, backend systems and inspectable reliability.**
 
 BSc Computer Science at the **University of Bologna — in progress**.
 
-I focus on systems where the engineering can be inspected: orchestration, evaluation, failure handling, reproducible tests, algorithms, ML/RL mechanics, Linux observability, security analysis, and developer-facing tooling.
+I build systems whose behavior I can explain and test: how requests are scheduled, how
+state survives a crash, how gradients flow, and how an evaluator distinguishes a bad
+submission from its own failure. My work spans Python, C++ and Java, with runnable
+examples and explicit engineering tradeoffs.
 
-## Flagship work
+## Start here — a five-minute technical review
 
-### [AtlasGuard](https://github.com/lEoNardoToP/lEoNardoToP/tree/main/projects/atlasguard) — public
+| Interest | Project to open | Concrete mechanism to inspect |
+|---|---|---|
+| ML platforms / observability | [AtlasGuard](projects/atlasguard) · public | Linux telemetry → PSI distribution-shift detection → explainable runtime findings |
+| AI algorithms / fundamentals | [AI Algorithms Portfolio](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · public | C++ autodiff/Adam, Java DQN and a shared alpha-beta contract across eight languages |
+| Compilers / reliable runtimes | [Leonardo's Lab](https://github.com/lEoNardoToP/Leonardo-sLab) · private source | Tensor graphs, fair inference scheduling, durable matching and calibrated software evaluation |
 
-Linux-native control plane for **ML observability, drift detection and explainable runtime security**.
+For public source, begin with **AtlasGuard** or **AI Algorithms Portfolio**. Leonardo's Lab
+and the R&D projects below require repository access; their source is not published here.
 
-It combines a lightweight Linux telemetry agent, a FastAPI control plane, Prometheus metrics, Population Stability Index drift monitoring, deterministic runtime-security findings, Docker deployment, systemd integration, a documented threat model, automated tests, and GitHub Actions CI.
+### AtlasGuard · observability and runtime signals
 
-**Focus:** Python · Linux · FastAPI · distributed telemetry · ML monitoring · Prometheus · Docker · runtime security
+A Linux-oriented control-plane prototype combining host telemetry, inference observations,
+Population Stability Index drift monitoring, deterministic security rules and Prometheus
+metrics. The source separates collection, API contracts, numerical detection and findings,
+with Docker/systemd deployment material and a documented threat model.
 
-What I own: architecture, telemetry contract, drift implementation, runtime policy engine, agent failure handling, observability, deployment hardening, threat modeling, tests, and CI.
+**Review:** [architecture and quick start](projects/atlasguard) →
+[drift implementation](projects/atlasguard/src/atlasguard/drift.py) →
+[tests](projects/atlasguard/tests).
 
-### HypoWeb — private R&D
+**Engineering discussion:** how monitoring itself stays bounded, how a reference distribution
+is established, and which findings come from explicit rules rather than opaque model scores.
+This is a prototype; production acceptance needs the deployment and failure evidence appropriate
+to the target environment.
 
-Scientific-reasoning and evidence-orchestration system for retrieving sources, extracting claims, linking evidence, generating and challenging hypotheses, ranking candidates, and tracking provenance across research runs.
+### AI Algorithms Portfolio · learn the mechanism by running it
 
-**Focus:** Python · scientific AI · evidence retrieval · evaluation · provenance · autonomous workflows
-
-What I own: system architecture, research orchestration, evaluation logic, failure handling, iterative experimentation, and release hardening.
-
-### IncidentLens — private R&D
-
-Security-analysis system built around controlled vulnerability discovery and validation in sandboxed/lab environments, with structured findings, repeatable evaluation, and defensive reporting workflows.
-
-**Focus:** C++ · Python · security tooling · CodeQL · Docker · evaluation · automation
-
-What I own: architecture, discovery/validation workflow, benchmark design, safety boundaries, testing, and release iteration.
-
-### [polyglot-alpha-beta-arena](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) — public
-
-A compact, inspectable AI/algorithms portfolio containing:
-
-- **NeuroForge C++** — reverse-mode autodiff, MLP training, binary cross-entropy, Adam, and gradient checking implemented from scratch;
-- **DeepGrid Java** — a Deep Q-Network with manual backpropagation, replay buffer, Bellman targets, target network, and epsilon-greedy exploration;
-- **Polyglot Alpha-Beta Arena** — minimax with alpha-beta pruning implemented consistently across Python, JavaScript, C, C++, Java, PHP, C#, and Swift through a shared JSON contract.
+[NeuroForge C++](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp)
+implements reverse-mode autodiff, MLP training, binary cross-entropy, Adam and gradient checking.
+[DeepGrid Java](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java)
+implements a compact DQN with manual backpropagation, replay and a target network.
+The same repository includes minimax/alpha-beta engines with one JSON contract in eight languages.
 
 ```bash
 ./run_ai_mechanics.sh
 ```
 
-The repository is intentionally small enough to review during a technical interview and uses automated build/test checks to keep the implementations consistent.
+**Engineering discussion:** how a local derivative becomes a training loop, why target networks
+stabilize value-based learning, and how independent expected results differ from engines merely
+agreeing with each other. [Technical interview notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md).
 
-## What I want to work on
+### Leonardo's Lab · four systems from expression to execution
 
-- ML platform / AI infrastructure;
-- backend and distributed systems;
-- applied AI systems and automation;
-- observability and reliability engineering;
-- security engineering and defensive tooling;
-- algorithmic and decision-making systems;
-- developer tools.
+- **TensorForge:** C++20 typed tensor IR, graph optimization and liveness-aware workspace reuse.
+- **InferMesh:** bounded inference scheduling, compatible batching, fair spawned workers and deadlines.
+- **NanoExchange:** price-time matching, indexed cancellation, persisted request identities and WAL recovery.
+- **AgentForge:** six calibrated software tasks, local/Docker evaluation and provenance-bearing reports.
 
-## Core stack
+The CPU baselines are merged, with source-linked local/native/Docker verification. GPU code
+generation, multi-machine serving and production durability remain separate milestones.
+[Reviewer route — requires access](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/docs/REVIEWER_GUIDE.md).
 
-**Languages:** Python, C++, Java, JavaScript/TypeScript, C, PHP, C#, Swift, SQL  
-**AI / Data:** NumPy, Pandas, scikit-learn, from-scratch ML/RL, LLM-based systems, evaluation pipelines  
-**Backend:** FastAPI, Django, REST APIs, automation scripts  
-**Systems / Security:** Git, GitHub Actions, Docker, Linux/macOS, Prometheus, CMake, shell scripting, CodeQL
+## Private R&D
 
-## Additional public work
+**HypoWeb** — scientific evidence orchestration: source retrieval, claim extraction, hypothesis
+construction/challenge and provenance across research runs. Focus: scientific AI, evaluation,
+research workflow reliability and evidence quality.
 
-### [Lernify_WEBAPP](https://github.com/lEoNardoToP/Lernify_WEBAPP)
-Web application prototype covering frontend/backend integration and product-oriented development.
+**IncidentLens** — controlled security-analysis workflows in lab environments, with structured
+findings, repeatable evaluation and defensive reporting. Focus: C++/Python, CodeQL, Docker
+and analysis automation.
 
-### [Logics](https://github.com/lEoNardoToP/Logics)
-Earlier educational platform project. Kept as development history rather than presented as flagship work.
+Private project descriptions are areas of work, not public benchmark or production-adoption claims.
 
-### [AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST)
-Earlier Django application showing models, forms, request handling, and frontend integration.
+## Roles and stack
+
+I'm interested in **ML platform / AI infrastructure**, **backend and systems engineering**,
+**observability/reliability**, **developer tools** and **defensive security tooling**.
+
+- **Daily engineering:** Python, C++, Java, SQL, Git, CMake, shell and GitHub Actions.
+- **Backend and operations:** FastAPI, Django, REST APIs, Docker, Linux/macOS and Prometheus.
+- **AI mechanics and evaluation:** NumPy, PyTorch, scikit-learn, from-scratch ML/RL and reproducible task evaluation.
+- **Additional languages:** JavaScript/TypeScript, C, PHP, C# and Swift.
+
+## Earlier application work
+
+[Lernify](https://github.com/lEoNardoToP/Lernify_WEBAPP),
+[Logics](https://github.com/lEoNardoToP/Logics) and
+[AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST) show my development history in web
+applications, frontend/backend integration and Django/PHP. Their current scope and setup are
+explained in their own repositories.
 
 ## Contact
 
-- GitHub: [@lEoNardoToP](https://github.com/lEoNardoToP)
-- LinkedIn: [Leonardo Rosati](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+[GitHub · @lEoNardoToP](https://github.com/lEoNardoToP) ·
+[LinkedIn · Leonardo Rosati](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
