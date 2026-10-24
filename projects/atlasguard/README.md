@@ -277,3 +277,8 @@ keeps label/detector state finite, but does not replace a streaming body limit,
 authentication or shared state for multi-worker deployment. See the
 [input and capacity contract](docs/DRIFT_INPUT_VALIDATION.md) for exact limits
 and the concurrent admission test.
+
+The agent reports rejected HTTP deliveries (including 429/500), waits between
+attempts, and collects host data outside its event loop. Cancellation closes
+the client; invalid intervals fail before I/O.
+[Agent failure/cancellation contract and tests](docs/AGENT_FAILURE_BEHAVIOR.md).
