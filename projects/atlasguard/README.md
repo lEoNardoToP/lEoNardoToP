@@ -282,3 +282,11 @@ The agent reports rejected HTTP deliveries (including 429/500), waits between
 attempts, and collects host data outside its event loop. Cancellation closes
 the client; invalid intervals fail before I/O.
 [Agent failure/cancellation contract and tests](docs/AGENT_FAILURE_BEHAVIOR.md).
+
+## Verify the real runtime
+
+From `projects/atlasguard`, run `python scripts/verify_docker_runtime.py` with
+Docker available. It builds the image, starts a real controller and Linux agent
+on an internal network without host ports, verifies drift/findings/metrics and
+invalid-input behavior, then removes both containers and the network.
+[Executed checks, source hashes and deployment limits](docs/DOCKER_RUNTIME_ACCEPTANCE.md).

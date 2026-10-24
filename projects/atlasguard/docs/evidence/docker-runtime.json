@@ -1,0 +1,28 @@
+{
+  "accepted": true,
+  "cleanup_confirmed": true,
+  "source_sha256": {
+    "src/atlasguard/__init__.py": "48e4356b6b0e7242b4f50a77631fdd773ec05163ccab5452a69f5cb2eeb1e249",
+    "src/atlasguard/agent.py": "8b3699bbcd85bca1b5ababacde967af4d060f0c4932de91e2ef7b3fa53f69fda",
+    "src/atlasguard/api.py": "166c7ff6313793aff1abf8587e1b5fc74d196f056eb25ec1045ae0dcd33f77bf",
+    "src/atlasguard/cli.py": "d6429aa4f73a449d4c3b06d37910eee0f8fa70209b25da812ccc3bdaa64887e8",
+    "src/atlasguard/drift.py": "06625646ab3e562ede860224daf249bb43e84c3a0fbd8ead4f3078ee15cf2d52",
+    "src/atlasguard/models.py": "3f2a5ba7beef2796027cc351375de1961f5e7596f1a0f1af9bb56ce7206736b2",
+    "src/atlasguard/rules.py": "d1b3bb4de4755c0c1582ccc227d5b88fdf59a9bc585634e4a72f6497121c53a1",
+    "src/atlasguard/store.py": "704dd742d5722f052578bbe8ccf56c2bd22569a34eb1da5f7953e7dd3a526b70",
+    "Dockerfile": "424e68664bc62c53cd514e1489c99a97ac907673133b770a3e3036b8b4951bca",
+    "pyproject.toml": "ad9c189c81531444c829caff9d5338b1ae4297dd3feb757a21d085d39e1d07a7",
+    "scripts/verify_docker_runtime.py": "4a84a6c21fde3a8a64b84ff94019c486df46d89f2015547958233d0fb71edd4e"
+  },
+  "image_id": "sha256:a2202ed5da68350c56bec9e9782b149ef985cddf91e2bd90d926f0dd66896113",
+  "checks": {
+    "health": true,
+    "linux_agent_batches": 2,
+    "drift_shift_detected": true,
+    "findings": true,
+    "prometheus": true,
+    "invalid_batch_atomic": true,
+    "non_root": true
+  },
+  "elapsed_seconds": 8.68672016999335
+}

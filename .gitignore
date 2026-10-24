@@ -8,3 +8,5 @@ __pycache__/
 htmlcov/
 *.egg-info/
 .DS_Store
+# Disposable runtime validation evidence
+projects/atlasguard/reports/
