@@ -16,7 +16,7 @@ class TelemetryModel(BaseModel):
 
 
 class HostSnapshot(TelemetryModel):
-    hostname: str
+    hostname: str = Field(min_length=1, max_length=253)
     cpu_percent: float = Field(ge=0, le=100)
     memory_percent: float = Field(ge=0, le=100)
     load_1m: float = Field(ge=0)
@@ -25,8 +25,8 @@ class HostSnapshot(TelemetryModel):
 
 
 class InferenceObservation(TelemetryModel):
-    service: str
-    model: str
+    service: str = Field(min_length=1, max_length=128)
+    model: str = Field(min_length=1, max_length=128)
     latency_ms: float = Field(ge=0)
     status_code: int = Field(ge=100, le=599)
     confidence: float | None = Field(default=None, ge=0, le=1)
@@ -36,19 +36,19 @@ class InferenceObservation(TelemetryModel):
 
 class RuntimeEvent(TelemetryModel):
     kind: Literal["process", "network", "container"]
-    executable: str | None = None
+    executable: str | None = Field(default=None, max_length=4096)
     uid: int | None = None
     destination_port: int | None = Field(default=None, ge=1, le=65535)
     privileged: bool = False
-    image: str | None = None
+    image: str | None = Field(default=None, max_length=512)
 
 
 class TelemetryBatch(TelemetryModel):
-    agent_id: str
+    agent_id: str = Field(min_length=1, max_length=128)
     observed_at: datetime = Field(default_factory=utc_now)
     host: HostSnapshot
-    inference: list[InferenceObservation] = Field(default_factory=list)
-    runtime: list[RuntimeEvent] = Field(default_factory=list)
+    inference: list[InferenceObservation] = Field(default_factory=list, max_length=256)
+    runtime: list[RuntimeEvent] = Field(default_factory=list, max_length=256)
 
 
 class Finding(TelemetryModel):

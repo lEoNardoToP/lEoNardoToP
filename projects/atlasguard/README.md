@@ -269,3 +269,11 @@ The HTTP suite exercises health, ingestion, findings, stored state and Prometheu
 output. Invalid nonfinite telemetry is rejected before mutation, and composite
 service/model identifiers cannot share a baseline through delimiter collisions.
 [Contracts, reproduced failure modes and current validation](docs/DRIFT_INPUT_VALIDATION.md).
+
+The controller also caps service/model cardinality at **256 pairs per process**.
+New identities beyond that cap receive 429 with no partial ingestion; existing
+identities remain usable. Batches and string fields have schema bounds. This
+keeps label/detector state finite, but does not replace a streaming body limit,
+authentication or shared state for multi-worker deployment. See the
+[input and capacity contract](docs/DRIFT_INPUT_VALIDATION.md) for exact limits
+and the concurrent admission test.

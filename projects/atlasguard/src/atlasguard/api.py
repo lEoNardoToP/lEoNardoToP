@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from threading import Lock
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from prometheus_client import Counter, Gauge, Histogram, make_asgi_app
@@ -33,7 +33,9 @@ store = EventStore()
 rules = RuntimeRuleEngine()
 # Tuple identity avoids collisions such as ("a:b", "c") and ("a", "b:c").
 detectors: dict[tuple[str, str], DriftDetector] = defaultdict(DriftDetector)
-_detector_lock = Lock()
+MAX_SERIES = 256
+_admitted_series: set[tuple[str, str]] = set()
+_ingest_lock = Lock()
 
 INGESTED = Counter("atlasguard_batches_total", "Telemetry batches received")
 FINDINGS = Counter(
@@ -68,6 +70,17 @@ def state() -> dict[str, object]:
 
 @app.post("/v1/telemetry", response_model=IngestResult)
 def ingest(batch: TelemetryBatch) -> IngestResult:
+    # Reserve all identities before metrics or state mutation. A latency-only
+    # observation creates Prometheus labels too, even without a drift sample.
+    identities = {(item.service, item.model) for item in batch.inference}
+    with _ingest_lock:
+        if len(_admitted_series | identities) > MAX_SERIES:
+            raise HTTPException(status_code=429, detail="Service/model capacity reached")
+        _admitted_series.update(identities)
+        return _ingest_admitted(batch)
+
+
+def _ingest_admitted(batch: TelemetryBatch) -> IngestResult:
     INGESTED.inc()
     findings = []
     latest_score: float | None = None
@@ -88,10 +101,9 @@ def ingest(batch: TelemetryBatch) -> IngestResult:
             continue
 
         key = (observation.service, observation.model)
-        # FastAPI sync endpoints use worker threads. Baseline/window updates
-        # form one state transition and must not interleave for the same key.
-        with _detector_lock:
-            score, is_drifted = detectors[key].observe(observation.feature_value)
+        # The caller holds the ingest lock through baseline, metrics and store
+        # publication; concurrent batches cannot reserve the same final slot.
+        score, is_drifted = detectors[key].observe(observation.feature_value)
         if score is not None:
             DRIFT_SCORE.labels(
                 service=observation.service, model=observation.model

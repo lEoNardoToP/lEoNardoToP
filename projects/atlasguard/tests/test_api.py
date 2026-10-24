@@ -26,6 +26,7 @@ def observation(service="service", model="model", value=1.0):
 @pytest.fixture
 def client(monkeypatch):
     monkeypatch.setattr(api, "store", EventStore())
+    monkeypatch.setattr(api, "_admitted_series", set())
     monkeypatch.setattr(api, "detectors", defaultdict(
         lambda: DriftDetector(baseline_size=10, window_size=10)))
     with TestClient(api.app) as session:
@@ -73,3 +74,69 @@ def test_nonfinite_telemetry_rejected_before_any_mutation(client, field, token):
     assert api.INGESTED._value.get() == count
     assert client.get("/v1/state").json()["batches"] == 0
     assert len(api.detectors) == 0
+
+
+def test_capacity_rejects_entire_batch_before_metrics_or_state(client, monkeypatch):
+    monkeypatch.setattr(api, "MAX_SERIES", 2)
+    assert client.post("/v1/telemetry", json=batch([observation("one")])).status_code == 200
+    before = api.INGESTED._value.get()
+    payload = batch([observation("two"), observation("three")])
+    payload["runtime"] = [{"kind": "process", "uid": 0}]
+    response = client.post("/v1/telemetry", json=payload)
+    assert response.status_code == 429
+    assert api._admitted_series == {("one", "model")}
+    assert set(api.detectors) == {("one", "model")}
+    assert api.INGESTED._value.get() == before
+    state = client.get("/v1/state").json()
+    assert state["batches"] == 1
+    assert state["findings"] == 0
+    metrics = client.get("/metrics/").text
+    assert 'service="two"' not in metrics
+    assert 'service="three"' not in metrics
+    assert client.post("/v1/telemetry", json=batch([observation("two")])).status_code == 200
+    # Existing series remain usable when no new slot is available.
+    assert client.post("/v1/telemetry", json=batch([observation("one")])).status_code == 200
+
+
+def test_latency_only_observations_cannot_bypass_series_capacity(client, monkeypatch):
+    monkeypatch.setattr(api, "MAX_SERIES", 1)
+    first = observation("latency-only", value=None)
+    assert client.post("/v1/telemetry", json=batch([first, first])).status_code == 200
+    assert len(api._admitted_series) == 1
+    assert len(api.detectors) == 0
+    assert client.post("/v1/telemetry", json=batch([observation("excess")])).status_code == 429
+    assert len(api.detectors) == 0
+
+
+def test_concurrent_ingestion_cannot_overbook_capacity(client, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    monkeypatch.setattr(api, "MAX_SERIES", 2)
+    def submit(index):
+        return client.post("/v1/telemetry", json=batch([
+            observation(f"concurrent-{index}")])).status_code
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        codes = list(executor.map(submit, range(8)))
+    assert codes.count(200) == 2
+    assert codes.count(429) == 6
+    assert len(api._admitted_series) == 2
+    assert len(api.detectors) == 2
+    assert client.get("/v1/state").json()["batches"] == 2
+
+
+@pytest.mark.parametrize("change", ["service", "model", "agent_id", "hostname", "inference", "runtime"])
+def test_batch_shape_limits_reject_before_admission(client, change):
+    payload = batch([observation()])
+    if change in ("service", "model"):
+        payload["inference"][0][change] = "x" * 129
+    elif change == "agent_id":
+        payload[change] = "x" * 129
+    elif change == "hostname":
+        payload["host"][change] = "x" * 254
+    elif change == "inference":
+        payload[change] = [observation()] * 257
+    else:
+        payload[change] = [{"kind": "process"}] * 257
+    assert client.post("/v1/telemetry", json=payload).status_code == 422
+    assert not api._admitted_series
+    assert not api.detectors
+    assert client.get("/v1/state").json()["batches"] == 0
