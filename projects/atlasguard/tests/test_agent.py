@@ -9,7 +9,6 @@ import httpx
 from atlasguard import agent
 from atlasguard.models import HostSnapshot
 
-
 HOST = HostSnapshot(hostname="qa", cpu_percent=0, memory_percent=1,
                     load_1m=0, process_count=1, established_tcp=0)
 REAL_CLIENT = httpx.AsyncClient
@@ -30,9 +29,9 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         with patch.object(agent.httpx, "AsyncClient", return_value=client), \
              patch.object(agent, "collect_host_snapshot", return_value=HOST), \
              patch.object(agent.asyncio, "sleep", side_effect=pause) as sleep, \
-             self.assertLogs(agent.logger, level="WARNING") as logs:
-            with self.assertRaises(asyncio.CancelledError):
-                await agent.run_agent("http://controller", interval_seconds=2)
+             self.assertLogs(agent.logger, level="WARNING") as logs, \
+             self.assertRaises(asyncio.CancelledError):
+            await agent.run_agent("http://controller", interval_seconds=2)
         self.assertEqual(len(requests), 4)
         self.assertEqual(sleep.await_count, 4)
         self.assertTrue(all(call.args == (2,) for call in sleep.await_args_list))
@@ -53,9 +52,9 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         with patch.object(agent.httpx, "AsyncClient", return_value=client), \
              patch.object(agent, "collect_host_snapshot", side_effect=[OSError("private path"), HOST]) as collect, \
              patch.object(agent.asyncio, "sleep", side_effect=pause), \
-             self.assertLogs(agent.logger, level="WARNING") as logs:
-            with self.assertRaises(asyncio.CancelledError):
-                await agent.run_agent("http://controller", interval_seconds=1)
+             self.assertLogs(agent.logger, level="WARNING") as logs, \
+             self.assertRaises(asyncio.CancelledError):
+            await agent.run_agent("http://controller", interval_seconds=1)
         self.assertEqual(collect.call_count, 2)
         self.assertEqual(pauses, 2)
         self.assertIn("Host collection failed (OSError)", logs.output[0])
