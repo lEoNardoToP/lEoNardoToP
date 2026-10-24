@@ -262,3 +262,31 @@ Those items are intentionally listed as roadmap rather than presented as finishe
 
 **Leonardo Rosati** — Computer Science, University of Bologna  
 [GitHub profile](https://github.com/lEoNardoToP) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+
+## Input and identity regression checks
+
+The HTTP suite exercises health, ingestion, findings, stored state and Prometheus
+output. Invalid nonfinite telemetry is rejected before mutation, and composite
+service/model identifiers cannot share a baseline through delimiter collisions.
+[Contracts, reproduced failure modes and current validation](docs/DRIFT_INPUT_VALIDATION.md).
+
+The controller also caps service/model cardinality at **256 pairs per process**.
+New identities beyond that cap receive 429 with no partial ingestion; existing
+identities remain usable. Batches and string fields have schema bounds. This
+keeps label/detector state finite, but does not replace a streaming body limit,
+authentication or shared state for multi-worker deployment. See the
+[input and capacity contract](docs/DRIFT_INPUT_VALIDATION.md) for exact limits
+and the concurrent admission test.
+
+The agent reports rejected HTTP deliveries (including 429/500), waits between
+attempts, and collects host data outside its event loop. Cancellation closes
+the client; invalid intervals fail before I/O.
+[Agent failure/cancellation contract and tests](docs/AGENT_FAILURE_BEHAVIOR.md).
+
+## Verify the real runtime
+
+From `projects/atlasguard`, run `python scripts/verify_docker_runtime.py` with
+Docker available. It builds the image, starts a real controller and Linux agent
+on an internal network without host ports, verifies drift/findings/metrics and
+invalid-input behavior, then removes both containers and the network.
+[Executed checks, source hashes and deployment limits](docs/DOCKER_RUNTIME_ACCEPTANCE.md).

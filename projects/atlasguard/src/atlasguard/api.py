@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from threading import Lock
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from prometheus_client import Counter, Gauge, Histogram, make_asgi_app
 
 from .drift import DriftDetector
@@ -16,9 +19,23 @@ app = FastAPI(
     description="Linux-native ML observability, drift detection and runtime security.",
 )
 
+
+@app.exception_handler(RequestValidationError)
+async def invalid_request(_request: Request, error: RequestValidationError) -> JSONResponse:
+    # Pydantic errors can contain the rejected NaN/Infinity as input. Echoing
+    # that value makes JSONResponse itself fail, turning admission into HTTP 500.
+    details = [{"loc": item["loc"], "type": item["type"], "msg": item["msg"]}
+               for item in error.errors()]
+    return JSONResponse(status_code=422, content={"detail": details})
+
+
 store = EventStore()
 rules = RuntimeRuleEngine()
-detectors: dict[str, DriftDetector] = defaultdict(DriftDetector)
+# Tuple identity avoids collisions such as ("a:b", "c") and ("a", "b:c").
+detectors: dict[tuple[str, str], DriftDetector] = defaultdict(DriftDetector)
+MAX_SERIES = 256
+_admitted_series: set[tuple[str, str]] = set()
+_ingest_lock = Lock()
 
 INGESTED = Counter("atlasguard_batches_total", "Telemetry batches received")
 FINDINGS = Counter(
@@ -53,6 +70,17 @@ def state() -> dict[str, object]:
 
 @app.post("/v1/telemetry", response_model=IngestResult)
 def ingest(batch: TelemetryBatch) -> IngestResult:
+    # Reserve all identities before metrics or state mutation. A latency-only
+    # observation creates Prometheus labels too, even without a drift sample.
+    identities = {(item.service, item.model) for item in batch.inference}
+    with _ingest_lock:
+        if len(_admitted_series | identities) > MAX_SERIES:
+            raise HTTPException(status_code=429, detail="Service/model capacity reached")
+        _admitted_series.update(identities)
+        return _ingest_admitted(batch)
+
+
+def _ingest_admitted(batch: TelemetryBatch) -> IngestResult:
     INGESTED.inc()
     findings = []
     latest_score: float | None = None
@@ -72,7 +100,9 @@ def ingest(batch: TelemetryBatch) -> IngestResult:
         if observation.feature_value is None:
             continue
 
-        key = f"{observation.service}:{observation.model}"
+        key = (observation.service, observation.model)
+        # The caller holds the ingest lock through baseline, metrics and store
+        # publication; concurrent batches cannot reserve the same final slot.
         score, is_drifted = detectors[key].observe(observation.feature_value)
         if score is not None:
             DRIFT_SCORE.labels(
