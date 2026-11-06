@@ -9,6 +9,12 @@ state survives a crash, how gradients flow, and how an evaluator distinguishes a
 submission from its own failure. My work spans Python, C++ and Java, with runnable
 examples and explicit engineering tradeoffs.
 
+## 90-second technical review
+
+- **Systems and observability:** [AtlasGuard source](projects/atlasguard/src/atlasguard), [regression tests](projects/atlasguard/tests), [architecture and quick start](projects/atlasguard).
+- **AI algorithms from first principles:** [C++ autodiff](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp), [Java DQN](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java), and [independent contract verification](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md).
+- **Independent evidence:** [CI runs for the public algorithms repository](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions) and runnable commands in each project README.
+
 ## Public code to review
 
 | Interest | Project to open | Concrete mechanism to inspect |
@@ -60,11 +66,11 @@ I'm interested in **ML platform / AI infrastructure**, **backend and systems eng
 
 ## Earlier application work
 
-[Lernify](https://github.com/lEoNardoToP/Lernify_WEBAPP),
-[Logics](https://github.com/lEoNardoToP/Logics) and
-[AVIATIONTEST](https://github.com/lEoNardoToP/AVIATIONTEST) show my development history in web
-applications, frontend/backend integration and Django/PHP. Their current scope and setup are
-explained in their own repositories.
+[Lernify](https://github.com/lEoNardoToP/Lernify_WEBAPP) and
+[Logics](https://github.com/lEoNardoToP/Logics) are older public web application experiments
+showing frontend/backend integration and Django/PHP-era learning. They are **not** the
+recommended starting points for AI infrastructure or systems interviews; see the two
+reviewer paths above.
 
 ## Contact
 
