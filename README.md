@@ -1,78 +1,46 @@
+<div align="center">
+
 # Leonardo Rosati
+### AI infrastructure · Systems engineering · Reliable software
 
-**Software engineer focused on AI infrastructure, backend systems and observability.**
+**I build systems whose correctness can be inspected—not just demonstrated.**
 
-BSc Computer Science at the **University of Bologna — in progress**.
+[Portfolio](https://leonardotop.github.io/) · [Public code](https://github.com/lEoNardoToP?tab=repositories) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
 
-I build systems whose behavior I can explain and test: how requests are scheduled, how
-state survives a crash, how gradients flow, and how an evaluator distinguishes a bad
-submission from its own failure. My work spans Python, C++ and Java, with runnable
-examples and explicit engineering tradeoffs.
+</div>
 
-## 90-second technical review
+---
 
-- **Systems and observability:** [AtlasGuard source](projects/atlasguard/src/atlasguard), [regression tests](projects/atlasguard/tests), [architecture and quick start](projects/atlasguard).
-- **AI algorithms from first principles:** [C++ autodiff](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp), [Java DQN](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java), and [independent contract verification](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md).
-- **Independent evidence:** [CI runs for the public algorithms repository](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions) and runnable commands in each project README.
+### Start here — a 90-second technical review
 
-## Public code to review
+| Project | What makes it interesting | Review |
+|:--|:--|:--|
+| **AtlasGuard** · Python / Linux | Explainable telemetry, PSI drift detection, runtime findings, Prometheus metrics | [Architecture & source](projects/atlasguard) · [Tests](projects/atlasguard/tests) |
+| **AI Algorithms Portfolio** · C++ / Java / polyglot | Autodiff, a DQN, and independently checked alpha-beta contracts | [Source](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · [CI](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions) |
 
-| Interest | Project to open | Concrete mechanism to inspect |
-|---|---|---|
-| ML platforms / observability | [AtlasGuard](projects/atlasguard) · public | Linux telemetry → PSI distribution-shift detection → explainable runtime findings |
-| AI algorithms / fundamentals | [AI Algorithms Portfolio](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · public | C++ autodiff/Adam, Java DQN and a shared alpha-beta contract across eight languages |
+### Deeper systems work — currently private
 
-### AtlasGuard · observability and runtime signals
+These are substantive engineering projects, **not public source releases**. Their descriptions are not substitutes for independent source review.
 
-A Linux-oriented control-plane prototype combining host telemetry, inference observations,
-Population Stability Index drift monitoring, deterministic security rules and Prometheus
-metrics. The source separates collection, API contracts, numerical detection and findings,
-with Docker/systemd deployment material and a documented threat model.
+| System | Core engineering problem | Current disclosure |
+|:--|:--|:--|
+| **AgentForge** | Reproducible AI coding-agent evaluation; grader isolation and evidence integrity | Private; release validation in progress |
+| **InferMesh** | Bounded inference admission, cancellation ownership and fair worker dispatch | Private; stress and lifecycle acceptance pending |
+| **TensorForge** | C++ tensor graphs, reverse-mode autodiff, memory planning and native backends | Private; performance claims require reproduced benchmarks |
+| **NanoExchange** | Price-time matching, write-ahead logging and crash recovery | Private; power-loss durability not certified |
 
-**Review:** [architecture and quick start](projects/atlasguard) →
-[drift implementation](projects/atlasguard/src/atlasguard/drift.py) →
-[tests](projects/atlasguard/tests).
+> **How I work:** explicit invariants → adversarial tests → failure evidence → reproducible release gates. I distinguish simulated faults from physical failures and mock workloads from real model throughput.
 
-**Engineering discussion:** how monitoring itself stays bounded, how a reference distribution
-is established, and which findings come from explicit rules rather than opaque model scores.
-This is a prototype; production acceptance needs the deployment and failure evidence appropriate
-to the target environment.
+### Read the implementation, not just the pitch
 
-### AI Algorithms Portfolio · learn the mechanism by running it
+- **Observability:** [PSI drift implementation](projects/atlasguard/src/atlasguard/drift.py) and [regression suite](projects/atlasguard/tests).
+- **ML fundamentals:** [C++ autodiff](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp), [Java DQN](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java).
+- **Independent verification:** [algorithm contracts](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md) and [GitHub Actions](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions).
 
-[NeuroForge C++](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp)
-implements reverse-mode autodiff, MLP training, binary cross-entropy, Adam and gradient checking.
-[DeepGrid Java](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java)
-implements a compact DQN with manual backpropagation, replay and a target network.
-The same repository includes minimax/alpha-beta engines with one JSON contract in eight languages.
+### About
 
-```bash
-./run_ai_mechanics.sh
-```
+Computer Science BSc student at the **University of Bologna**. Interested in **AI/ML infrastructure**, **backend & systems**, **reliability**, **developer tooling**, and **observability**.
 
-**Engineering discussion:** how a local derivative becomes a training loop, why target networks
-stabilize value-based learning, and how independent expected results differ from engines merely
-agreeing with each other. [Technical interview notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md).
+**Tools:** Python · C++20 · Java · Linux · Docker · CMake · FastAPI · SQL · GitHub Actions · PyTorch
 
-## Roles and stack
-
-I'm interested in **ML platform / AI infrastructure**, **backend and systems engineering**,
-**observability/reliability**, **developer tools** and **defensive security tooling**.
-
-- **Daily engineering:** Python, C++, Java, SQL, Git, CMake, shell and GitHub Actions.
-- **Backend and operations:** FastAPI, Django, REST APIs, Docker, Linux/macOS and Prometheus.
-- **AI mechanics and evaluation:** NumPy, PyTorch, scikit-learn, from-scratch ML/RL and reproducible task evaluation.
-- **Additional languages:** JavaScript/TypeScript, C, PHP, C# and Swift.
-
-## Earlier application work
-
-[Lernify](https://github.com/lEoNardoToP/Lernify_WEBAPP) and
-[Logics](https://github.com/lEoNardoToP/Logics) are older public web application experiments
-showing frontend/backend integration and Django/PHP-era learning. They are **not** the
-recommended starting points for AI infrastructure or systems interviews; see the two
-reviewer paths above.
-
-## Contact
-
-[GitHub · @lEoNardoToP](https://github.com/lEoNardoToP) ·
-[LinkedIn · Leonardo Rosati](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+<sub>Engineering claims should be tied to a source revision, a runnable command, and observed evidence. No inflated badges, fabricated benchmarks, or simulated demo videos.</sub>
