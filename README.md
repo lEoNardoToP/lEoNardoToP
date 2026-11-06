@@ -1,6 +1,6 @@
 # Leonardo Rosati
 
-**Software engineer focused on AI infrastructure, backend systems and inspectable reliability.**
+**Software engineer focused on AI infrastructure, backend systems and observability.**
 
 BSc Computer Science at the **University of Bologna — in progress**.
 
@@ -9,16 +9,12 @@ state survives a crash, how gradients flow, and how an evaluator distinguishes a
 submission from its own failure. My work spans Python, C++ and Java, with runnable
 examples and explicit engineering tradeoffs.
 
-## Start here — a five-minute technical review
+## Public code to review
 
 | Interest | Project to open | Concrete mechanism to inspect |
 |---|---|---|
 | ML platforms / observability | [AtlasGuard](projects/atlasguard) · public | Linux telemetry → PSI distribution-shift detection → explainable runtime findings |
 | AI algorithms / fundamentals | [AI Algorithms Portfolio](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · public | C++ autodiff/Adam, Java DQN and a shared alpha-beta contract across eight languages |
-| Compilers / reliable runtimes | [Leonardo's Lab](https://github.com/lEoNardoToP/Leonardo-sLab) · private source | Tensor graphs, fair inference scheduling, durable matching and calibrated software evaluation |
-
-For public source, begin with **AtlasGuard** or **AI Algorithms Portfolio**. Leonardo's Lab
-and the R&D projects below require repository access; their source is not published here.
 
 ### AtlasGuard · observability and runtime signals
 
@@ -51,29 +47,6 @@ The same repository includes minimax/alpha-beta engines with one JSON contract i
 **Engineering discussion:** how a local derivative becomes a training loop, why target networks
 stabilize value-based learning, and how independent expected results differ from engines merely
 agreeing with each other. [Technical interview notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md).
-
-### Leonardo's Lab · four systems from expression to execution
-
-- **TensorForge:** C++20 typed tensor IR, graph optimization and liveness-aware workspace reuse.
-- **InferMesh:** bounded inference scheduling, compatible batching, fair spawned workers and deadlines.
-- **NanoExchange:** price-time matching, indexed cancellation, persisted request identities and WAL recovery.
-- **AgentForge:** six calibrated software tasks, local/Docker evaluation and provenance-bearing reports.
-
-The CPU baselines are merged, with source-linked local/native/Docker verification. GPU code
-generation, multi-machine serving and production durability remain separate milestones.
-[Reviewer route — requires access](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/docs/REVIEWER_GUIDE.md).
-
-## Private R&D
-
-**HypoWeb** — scientific evidence orchestration: source retrieval, claim extraction, hypothesis
-construction/challenge and provenance across research runs. Focus: scientific AI, evaluation,
-research workflow reliability and evidence quality.
-
-**IncidentLens** — controlled security-analysis workflows in lab environments, with structured
-findings, repeatable evaluation and defensive reporting. Focus: C++/Python, CodeQL, Docker
-and analysis automation.
-
-Private project descriptions are areas of work, not public benchmark or production-adoption claims.
 
 ## Roles and stack
 
