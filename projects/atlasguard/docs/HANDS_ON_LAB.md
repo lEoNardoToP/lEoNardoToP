@@ -1,6 +1,4 @@
-# AtlasGuard × Sysdig — Hands-on Lab
-
-**Target:** Junior AI & Product Enablement Specialist — Italy / Remote
+# AtlasGuard — Hands-on Lab
 
 ## Learning goal
 
@@ -49,6 +47,6 @@ Replace the synthetic runtime event source with a Falco/eBPF-backed event source
 
 ## Honest scope
 
-AtlasGuard is **not** presented as a replacement for Sysdig or Falco. The runtime events in the current prototype are user-space inputs. The value of the lab is that it makes the underlying concepts inspectable and teachable and leaves a technically honest path toward real kernel event collection.
+AtlasGuard is **not** presented as a replacement for production runtime-security tools such as Falco. The runtime events in the current prototype are user-space inputs. The value of the lab is that it makes the underlying concepts inspectable and teachable and leaves a technically honest path toward real kernel event collection.
 
 **Author:** Leonardo Rosati — BSc Computer Science, University of Bologna (in progress)

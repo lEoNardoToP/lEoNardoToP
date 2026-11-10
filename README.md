@@ -1,46 +1,50 @@
 <div align="center">
 
 # Leonardo Rosati
-### AI infrastructure · Systems engineering · Reliable software
+### ML infrastructure · Systems engineering · Reliable software
 
-**I build systems whose correctness can be inspected—not just demonstrated.**
+**I build the mechanisms underneath ML systems, and I test them until their failure boundaries are written down.**
 
-[Portfolio](https://leonardotop.github.io/) · [Public code](https://github.com/lEoNardoToP?tab=repositories) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+[Portfolio](https://leonardotop.github.io/) · [Leonardo's Lab](https://github.com/lEoNardoToP/Leonardo-sLab) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+
+Computer Science BSc · University of Bologna · Bologna, Italy
 
 </div>
 
 ---
 
-### Start here — a 90-second technical review
+### Leonardo's Lab: four systems, one engineering standard
 
-| Project | What makes it interesting | Review |
+[**Leonardo's Lab**](https://github.com/lEoNardoToP/Leonardo-sLab) is my main body of work: four projects that go from tensor expressions to reliable execution. Each has a runnable example, explicit contracts, regression tests and dated, source-linked evidence.
+
+| Project | The question it answers | Look at |
 |:--|:--|:--|
-| **AtlasGuard** · Python / Linux | Explainable telemetry, PSI drift detection, runtime findings, Prometheus metrics | [Architecture & source](projects/atlasguard) · [Tests](projects/atlasguard/tests) |
-| **AI Algorithms Portfolio** · C++ / Java / polyglot | Autodiff, a DQN, and independently checked alpha-beta contracts | [Source](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · [CI](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions) |
+| [**TensorForge**](https://github.com/lEoNardoToP/Leonardo-sLab/tree/main/projects/tensorforge) · C++20 | How does a tensor graph generate its own gradients and run with safe memory reuse? | Typed IR → generated backward graph → native C++ loops, LibTorch and Triton backends, checked on a real T4 |
+| [**InferMesh**](https://github.com/lEoNardoToP/Leonardo-sLab/tree/main/projects/infermesh) · Python | How do concurrent requests share finite workers without losing deadlines or fairness? | Batching, per-tenant admission, supervised worker processes, streaming HTTP/SSE, OpenTelemetry tracing |
+| [**NanoExchange**](https://github.com/lEoNardoToP/Leonardo-sLab/tree/main/projects/nanoexchange) · C++20 | How does a matching engine survive crashes and client retries without losing order? | Price-time book, fsynced WAL, fenced compaction, 1,852 injected POSIX fault scenarios |
+| [**AgentForge**](https://github.com/lEoNardoToP/Leonardo-sLab/tree/main/projects/agentforge) · Python | How do you tell a bad AI-agent submission from a broken evaluator? | Calibrated task contracts, Docker isolation, independent grading, forged-output rejection |
 
-### Deeper systems work — currently private
+Plus [six from-scratch experiments](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/docs/EXPERIMENT_GUIDE.md): tensors and convolution, autograd, a tiny Transformer, an attention explorer, Triton GPU kernels and evidence-aware retrieval.
 
-These are substantive engineering projects, **not public source releases**. Their descriptions are not substitutes for independent source review.
+**Two-minute check, no GPU or API key needed:**
 
-| System | Core engineering problem | Current disclosure |
-|:--|:--|:--|
-| **AgentForge** | Reproducible AI coding-agent evaluation; grader isolation and evidence integrity | Private; release validation in progress |
-| **InferMesh** | Bounded inference admission, cancellation ownership and fair worker dispatch | Private; stress and lifecycle acceptance pending |
-| **TensorForge** | C++ tensor graphs, reverse-mode autodiff, memory planning and native backends | Private; performance claims require reproduced benchmarks |
-| **NanoExchange** | Price-time matching, write-ahead logging and crash recovery | Private; power-loss durability not certified |
+```bash
+git clone https://github.com/lEoNardoToP/Leonardo-sLab && cd Leonardo-sLab
+PYTHONPATH=projects/infermesh/src python3 -m infermesh.demo
+```
 
-> **How I work:** explicit invariants → adversarial tests → failure evidence → reproducible release gates. I distinguish simulated faults from physical failures and mock workloads from real model throughput.
+[Five-minute reviewer route](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/docs/REVIEWER_GUIDE.md) · [Current evidence](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/docs/CURRENT_EVIDENCE.md) · [Roadmap and open limits](https://github.com/lEoNardoToP/Leonardo-sLab/blob/main/ROADMAP.md)
 
-### Read the implementation, not just the pitch
+### Smaller public projects
 
-- **Observability:** [PSI drift implementation](projects/atlasguard/src/atlasguard/drift.py) and [regression suite](projects/atlasguard/tests).
-- **ML fundamentals:** [C++ autodiff](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/neuroforge-cpp), [Java DQN](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/tree/main/deepgrid-java).
-- **Independent verification:** [algorithm contracts](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md) and [GitHub Actions](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/actions).
+| Project | What it is |
+|:--|:--|
+| [**AtlasGuard**](projects/atlasguard) · Python / Linux | Linux telemetry agent and control plane: PSI drift detection, explainable runtime findings, Prometheus metrics, hardened Docker and systemd deployment, CI on Python 3.11 and 3.12 |
+| [**AI Algorithms Portfolio**](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · C++ / Java / polyglot | C++ autodiff and MLP, a Java DQN, and alpha-beta engines in eight languages, each checked in CI against an independent unpruned game-tree oracle |
+| [**Deep Vault: Risk & Loot**](https://github.com/lEoNardoToP/DeepVault) · game | 2D roguelite for Android and web, in development |
 
-### About
+### How I work
 
-Computer Science BSc student at the **University of Bologna**. Interested in **AI/ML infrastructure**, **backend & systems**, **reliability**, **developer tooling**, and **observability**.
+A working reference comes first. Optimizations must reproduce its results, failure handling is exercised on purpose, and every performance claim names its workload and hardware. Where something is not verified (physical power loss, multi-host serving, GPU speedups), the docs say so.
 
-**Tools:** Python · C++20 · Java · Linux · Docker · CMake · FastAPI · SQL · GitHub Actions · PyTorch
-
-<sub>Engineering claims should be tied to a source revision, a runnable command, and observed evidence. No inflated badges, fabricated benchmarks, or simulated demo videos.</sub>
+**Tools:** Python · C++20 · Java · PyTorch · Triton · CUDA · FastAPI · Docker · CMake · Linux · SQL · OpenTelemetry · Prometheus · GitHub Actions
