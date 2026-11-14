@@ -2,11 +2,11 @@
 
 # Leonardo Rosati
 
-### ML infrastructure · Systems engineering · Failure analysis
+### ML infrastructure · Systems engineering · Reliable software
 
-**Build the mechanism. Break the assumptions. Keep the evidence.**
+**Build the mechanism. Break it on purpose. Make the result reproducible.**
 
-[Portfolio](https://leonardotop.github.io/) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
+[Portfolio](https://leonardotop.github.io/) · [Public code](https://github.com/lEoNardoToP?tab=repositories&type=public) · [LinkedIn](https://www.linkedin.com/in/leonardo-rosati-97b863273/)
 
 Computer Science BSc · University of Bologna · Bologna, Italy
 
@@ -47,6 +47,8 @@ that checks the engines independently.
 - **Rejected deliveries / cancellation:** agent behavior is documented with failure and cleanup checks. [Agent contract](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/AGENT_FAILURE_BEHAVIOR.md).
 - **Engines that agree on the wrong answer:** the arena checks against an independent game-tree oracle, including an exhaustive Python route over 4,520 nonterminal positions. [Validation scope and evidence](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md).
 
+[AtlasGuard Docker acceptance evidence](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/DOCKER_RUNTIME_ACCEPTANCE.md) · [Algorithms technical notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md)
+
 ## Behind the lab door
 
 **Leonardo's Lab is currently private.** Its source, runnable demos and evidence
@@ -60,6 +62,8 @@ documents require repository access. The four systems explore:
 | **AgentForge** · Python | Task contracts, isolated execution and independent grading |
 
 For immediately inspectable work, use the public projects above.
+
+[**Deep Vault: Risk & Loot**](https://github.com/lEoNardoToP/DeepVault) is a 2D roguelite for Android and web, in development. Its public repository is currently a placeholder.
 
 ## Engineering rules
 
