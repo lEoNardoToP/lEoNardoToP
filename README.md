@@ -1,6 +1,7 @@
 <div align="center">
 
 # Leonardo Rosati
+
 ### ML infrastructure · Systems engineering · Reliable software
 
 **Build the mechanism. Break it on purpose. Make the result reproducible.**
@@ -11,22 +12,24 @@ Computer Science BSc · University of Bologna · Bologna, Italy
 
 </div>
 
----
+```text
+leo@lab:~$ cat engineering.conf
 
-### Start here: public code you can inspect
+focus       = ML internals / Linux systems / reliable execution
+method      = implement -> test -> inject failures -> document limits
+entrypoint  = public source + runnable commands below
+```
 
-| Project | Engineering focus | First thing to inspect |
+## Inspect the code
+
+| System | What to inspect | Start here |
 |:--|:--|:--|
-| [**AtlasGuard**](projects/atlasguard) · Python / Linux | Host telemetry, ML distribution drift and explainable runtime findings in one control-plane prototype | [Input and capacity contracts](projects/atlasguard/docs/DRIFT_INPUT_VALIDATION.md), [agent failure handling](projects/atlasguard/docs/AGENT_FAILURE_BEHAVIOR.md), [Docker acceptance evidence](projects/atlasguard/docs/DOCKER_RUNTIME_ACCEPTANCE.md) |
-| [**AI Algorithms Portfolio**](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · C++ / Java / eight languages | Reverse-mode autodiff, MLP training, a Java DQN and consistent alpha-beta engines | [Independent oracle validation](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md) and [technical notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md) |
+| **AtlasGuard** · Python / Linux | Host telemetry, PSI drift detection, explainable runtime rules and bounded ingestion | [Source & quick start](https://github.com/lEoNardoToP/lEoNardoToP/tree/main/projects/atlasguard) · [Hands-on lab](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/HANDS_ON_LAB.md) |
+| **AI Algorithms Portfolio** · C++ / Java / polyglot | From-scratch autodiff and MLP, a Java DQN, and alpha-beta engines in eight languages | [Source & reviewer route](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena) · [Independent contract checker](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/scripts/verify_contract.py) |
 
-**AtlasGuard:** bounded admission, isolated drift baselines, explicit delivery failures, Prometheus metrics and least-privilege deployment. A prototype with documented limits and a path to reproduce its checks.
+### Run something in one minute
 
-**AI Algorithms Portfolio:** the learning and search mechanics are implemented directly. Alpha-beta results are checked against an independent unpruned game-tree oracle; the Python check can cover all **4,520 reachable nonterminal positions**.
-
-### Try the algorithms
-
-Requires Python 3 and Git. No GPU or API key needed.
+Requires Git and Python 3.10+. No GPU, dependencies or API key for this example.
 
 ```bash
 git clone https://github.com/lEoNardoToP/polyglot-alpha-beta-arena.git
@@ -34,16 +37,38 @@ cd polyglot-alpha-beta-arena
 python3 python/main.py XX-OO---- X
 ```
 
-Then inspect [the shared CLI contract and verification commands](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena#independent-contract-verification).
+The engine must choose **move 2**, with **score 9** (cells are numbered 0–8).
+Then inspect the [unpruned oracle](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/scripts/verify_contract.py)
+that checks the engines independently.
 
-### More work
+### Follow the failure paths
 
-**Leonardo's Lab** is my private systems workspace. Its source and evidence are not currently available to public visitors; start with the public projects above to evaluate my work.
+- **Bad telemetry / capacity pressure:** AtlasGuard rejects nonfinite input and caps service/model identities. [Input and capacity contract](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/DRIFT_INPUT_VALIDATION.md).
+- **Rejected deliveries / cancellation:** agent behavior is documented with failure and cleanup checks. [Agent contract](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/AGENT_FAILURE_BEHAVIOR.md).
+- **Engines that agree on the wrong answer:** the arena checks against an independent game-tree oracle, including an exhaustive Python route over 4,520 nonterminal positions. [Validation scope and evidence](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/docs/CONTRACT_VALIDATION_2026-10-24.md).
+
+[AtlasGuard Docker acceptance evidence](https://github.com/lEoNardoToP/lEoNardoToP/blob/main/projects/atlasguard/docs/DOCKER_RUNTIME_ACCEPTANCE.md) · [Algorithms technical notes](https://github.com/lEoNardoToP/polyglot-alpha-beta-arena/blob/main/TECHNICAL_INTERVIEW_NOTES.md)
+
+## Behind the lab door
+
+**Leonardo's Lab is currently private.** Its source, runnable demos and evidence
+documents require repository access. The four systems explore:
+
+| Project | Engineering focus |
+|:--|:--|
+| **TensorForge** · C++20 | Tensor IR, automatic differentiation and execution backends |
+| **InferMesh** · Python | Batching, admission control, deadlines and supervised workers |
+| **NanoExchange** · C++20 | Price-time matching, write-ahead logging and crash recovery |
+| **AgentForge** · Python | Task contracts, isolated execution and independent grading |
+
+For immediately inspectable work, use the public projects above.
 
 [**Deep Vault: Risk & Loot**](https://github.com/lEoNardoToP/DeepVault) is a 2D roguelite for Android and web, in development. Its public repository is currently a placeholder.
 
-### How I work
+## Engineering rules
 
-A working reference comes first. Optimizations must reproduce its results, failure handling is exercised on purpose, and every performance claim names its workload and hardware. Unverified behavior and unfinished capabilities belong in the documented limits.
+A working reference comes first. Optimizations must reproduce its results.
+Failure handling gets exercised on purpose. Performance claims name the workload,
+environment and measurement method; unverified behavior stays an explicit limit.
 
 **Tools:** Python · C++20 · Java · PyTorch · Triton · CUDA · FastAPI · Docker · CMake · Linux · SQL · OpenTelemetry · Prometheus · GitHub Actions
