@@ -140,3 +140,11 @@ def test_batch_shape_limits_reject_before_admission(client, change):
     assert not api._admitted_series
     assert not api.detectors
     assert client.get("/v1/state").json()["batches"] == 0
+
+
+def test_metrics_served_without_redirect_on_both_paths(client):
+    for path in ("/metrics", "/metrics/"):
+        response = client.get(path, follow_redirects=False)
+        assert response.status_code == 200, path
+        assert response.headers["content-type"].startswith("text/plain")
+        assert "atlasguard_batches_total" in response.text

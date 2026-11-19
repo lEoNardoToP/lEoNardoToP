@@ -5,8 +5,8 @@ from threading import Lock
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from prometheus_client import Counter, Gauge, Histogram, make_asgi_app
+from fastapi.responses import JSONResponse, Response
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
 
 from .drift import DriftDetector
 from .models import IngestResult, TelemetryBatch
@@ -55,7 +55,12 @@ INFERENCE_LATENCY = Histogram(
     buckets=(5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000),
 )
 
-app.mount("/metrics", make_asgi_app())
+# Serve both spellings directly. A mounted sub-app answered "/metrics" with a
+# 307 redirect and an empty body, which the README's curl example printed as nothing.
+@app.get("/metrics", include_in_schema=False)
+@app.get("/metrics/", include_in_schema=False)
+def metrics() -> Response:
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.get("/healthz")
